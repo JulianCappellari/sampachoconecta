@@ -23,6 +23,7 @@ export function PhotoInput({ max = 4, label = "Fotos", hint }: { max?: number; l
       <input
         id="photos"
         name="photos"
+        data-max-files={max}
         type="file"
         accept="image/*"
         multiple={max > 1}

@@ -10,6 +10,8 @@ import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { RegisterSW } from "@/components/site/RegisterSW";
 import { EmergencyButton } from "@/components/site/EmergencyButton";
 
+export const maxDuration = 60;
+
 const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display", display: "swap" });
 const body = Atkinson_Hyperlegible({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-body", display: "swap" });
 

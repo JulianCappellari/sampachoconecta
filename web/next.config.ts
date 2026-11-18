@@ -1,13 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Salida autónoma: una carpeta mínima con solo lo necesario para correr (ideal para contenedores).
-  output: "standalone",
   // App con sesiones y base de datos: se renderiza por pedido (sin Cache Components).
   serverExternalPackages: ["sharp"],
   experimental: {
-    // Las fotos se comprimen en el servidor; el formulario puede traer hasta 4 fotos de 8 MB.
-    serverActions: { bodySizeLimit: "40mb" },
+    // El cliente reduce las fotos antes del envío; el cuerpo queda debajo del límite de Vercel.
+    serverActions: { bodySizeLimit: "4mb" },
   },
   turbopack: {
     rules: {

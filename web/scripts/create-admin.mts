@@ -1,3 +1,4 @@
+import "./env.mts";
 /**
  * Crea (o promueve) una cuenta de la municipalidad. Es la forma de tener el primer administrador real en un entorno
  * nuevo, porque el registro público solo crea vecinos y los roles se asignan desde el panel.
@@ -25,14 +26,12 @@ if (!["municipio", "moderador"].includes(role)) fail("--role debe ser municipio 
 if (!password || password.length < 12) fail("Definí ADMIN_PASSWORD con al menos 12 caracteres.");
 
 process.env.SEED_DISABLE_AUTO = "1"; // nunca cargar datos de ejemplo al crear un administrador
-const { getDb } = await import("../src/lib/db");
-const db = getDb();
-const existing = db.prepare("SELECT id, role FROM users WHERE email = ?").get(email!) as { id: number; role: string } | undefined;
-
-if (existing) {
-  db.prepare("UPDATE users SET role = ?, pass_hash = ?, suspended = 0 WHERE id = ?").run(role, hashPassword(password!), existing.id);
-  console.log(`\n✔ La cuenta ${email} ya existía: ahora es "${role}" y se actualizó su contraseña.\n`);
-} else {
-  db.prepare("INSERT INTO users (name,email,role,barrio,pass_hash,verified_at) VALUES (?,?,?,?,?,datetime('now'))").run(name, email!, role, "Centro", hashPassword(password!));
-  console.log(`\n✔ Cuenta "${role}" creada: ${email}\n`);
-}
+const { one, run, tx, closeDb } = await import("../src/lib/db");
+try {
+  await tx(async () => {
+    const existing = await one<{id:number}>("SELECT id FROM users WHERE email = ?", email!);
+    if (existing) await run("UPDATE users SET role = ?, pass_hash = ?, suspended = 0 WHERE id = ?", role, hashPassword(password!), existing.id);
+    else await run("INSERT INTO users (name,email,role,barrio,pass_hash,verified_at) VALUES (?,?,?,?,?,datetime('now'))", name, email!, role, "Centro", hashPassword(password!));
+    console.log(`Cuenta ${role} creada o actualizada.`);
+  });
+} finally { await closeDb(); }

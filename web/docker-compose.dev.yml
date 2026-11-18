@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    ports:
+      - "127.0.0.1:55438:5432"
+    environment:
+      POSTGRES_USER: sampacho
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Definí POSTGRES_PASSWORD para desarrollo local}
+      POSTGRES_DB: sampacho_dev
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sampacho -d sampacho_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  postgres_data:

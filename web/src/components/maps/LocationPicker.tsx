@@ -17,7 +17,7 @@ export function LocationPicker({ label = "Ubicación en el mapa", hint }: { labe
   useEffect(() => {
     let map: import("leaflet").Map | undefined;
     let dead = false;
-    (async () => {
+    void (async () => {
       const L = (await import("leaflet")).default;
       if (dead || !el.current) return;
       map = L.map(el.current, { scrollWheelZoom: false }).setView(SAMPACHO_CENTER, 15);
@@ -39,7 +39,7 @@ export function LocationPicker({ label = "Ubicación en el mapa", hint }: { labe
       };
       api.current = { set };
       map.on("click", (e) => set([e.latlng.lat, e.latlng.lng]));
-    })();
+    })().catch(() => { if (!dead) setMsg("No pudimos cargar el mapa. Podés escribir la dirección."); });
     return () => {
       dead = true;
       map?.remove();

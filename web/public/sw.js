@@ -4,13 +4,13 @@
  * - Nunca se guardan reclamos, avisos personales, API ni páginas con sesión: solo las rutas de la lista PUBLIC.
  * - Avisos push: se muestran sin datos privados (el servidor ya envía mensajes genéricos para reclamos).
  */
-const VERSION = "v1";
+const VERSION = "v2";
 const STATIC = `sc-static-${VERSION}`;
 const PAGES = `sc-pages-${VERSION}`;
 const PUBLIC = ["/utiles", "/agenda", "/residuos", "/visitar", "/transparencia", "/privacidad"];
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(PAGES).then((c) => c.add("/offline")).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(PAGES).then(async (c) => c.put("/offline", await fetch("/offline", { credentials: "omit" }))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (e) => {
@@ -24,7 +24,7 @@ self.addEventListener("activate", (e) => {
 
 self.addEventListener("message", (e) => {
   // Al cambiar de usuario o cerrar sesión, se borran las páginas guardadas (equipos compartidos).
-  if (e.data && e.data.type === "clear-pages") e.waitUntil(caches.delete(PAGES).then(() => caches.open(PAGES)).then((c) => c.add("/offline")));
+  if (e.data && e.data.type === "clear-pages") e.waitUntil(caches.delete(PAGES).then(() => caches.open(PAGES)).then(async (c) => c.put("/offline", await fetch("/offline", { credentials: "omit" }))));
 });
 
 self.addEventListener("fetch", (e) => {
@@ -52,9 +52,9 @@ self.addEventListener("fetch", (e) => {
     e.respondWith(
       fetch(req)
         .then((res) => {
-          if (cacheable && res.ok) {
+          if (cacheable && res.ok && res.headers.get("X-Sampacho-Offline-Public") === "1") {
             const copy = res.clone();
-            caches.open(PAGES).then((c) => c.put(req, copy));
+            e.waitUntil(caches.open(PAGES).then((c) => c.put(req, copy)));
           }
           return res;
         })

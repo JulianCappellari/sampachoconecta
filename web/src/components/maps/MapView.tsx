@@ -27,7 +27,7 @@ export function MapView({ markers, className, zoom = 15 }: { markers: MapMarker[
   useEffect(() => {
     let map: import("leaflet").Map | undefined;
     let dead = false;
-    (async () => {
+    void (async () => {
       const L = (await import("leaflet")).default;
       if (dead || !el.current) return;
       map = L.map(el.current, { scrollWheelZoom: false, zoomControl: true }).setView(SAMPACHO_CENTER, zoom);
@@ -44,7 +44,7 @@ export function MapView({ markers, className, zoom = 15 }: { markers: MapMarker[
       }
       if (pts.length > 1) map.fitBounds(pts, { padding: [40, 40], maxZoom: 17 });
       else if (pts.length === 1) map.setView(pts[0], 16);
-    })();
+    })().catch(() => { if (el.current) el.current.setAttribute("aria-label", "No pudimos cargar el mapa"); });
     return () => {
       dead = true;
       map?.remove();
