@@ -21,3 +21,8 @@ npm-debug.log*
 
 # Copia exportada del documento de diseño (la fuente está en docs/)
 Sampacho Conecta.html
+
+# Despliegue: datos, copias y secretos del servidor
+deploy/data/
+deploy/backups/
+deploy/.env

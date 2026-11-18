@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Salida autónoma: una carpeta mínima con solo lo necesario para correr (ideal para contenedores).
+  output: "standalone",
   // App con sesiones y base de datos: se renderiza por pedido (sin Cache Components).
   serverExternalPackages: ["sharp"],
   experimental: {

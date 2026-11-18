@@ -45,6 +45,8 @@ El seed cubre todos los módulos en todos sus estados, con 19 cuentas de prueba 
 
 Cuentas, qué hay cargado y una guía de pruebas por rol: [`../docs/SEED_Y_PRODUCCION.md`](../docs/SEED_Y_PRODUCCION.md).
 
+Publicar gratis en un servidor propio (Oracle Cloud + Docker + HTTPS): [`../docs/DESPLIEGUE_ORACLE.md`](../docs/DESPLIEGUE_ORACLE.md).
+
 ## Stack
 
 Next.js 16 (App Router, Server Actions) · React 19 · Tailwind CSS 4 · GSAP + ScrollTrigger · SQLite (`node:sqlite`) · Zod · Leaflet + OpenStreetMap · sharp.
