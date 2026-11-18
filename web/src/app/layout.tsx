@@ -9,6 +9,7 @@ import { RevealProvider } from "@/components/motion/RevealProvider";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { RegisterSW } from "@/components/site/RegisterSW";
 import { EmergencyButton } from "@/components/site/EmergencyButton";
+import { INDEXABLE, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 
 export const maxDuration = 60;
 
@@ -16,11 +17,21 @@ const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-disp
 const body = Atkinson_Hyperlegible({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-body", display: "swap" });
 
 export const metadata: Metadata = {
-  title: { default: "Sampacho Conecta", template: "%s · Sampacho Conecta" },
-  description: "La plaza del pueblo en el celular: novedades, comercios, oficios, reclamos al municipio e ideas vecinales de Sampacho.",
-  applicationName: "Sampacho Conecta",
+  metadataBase: new URL(SITE_URL),
+  title: { default: `${SITE_NAME} · ${SITE_TAGLINE}`, template: `%s · ${SITE_NAME}` },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: ["Sampacho", "Sampacho Córdoba", "comercios de Sampacho", "oficios Sampacho", "farmacia de turno Sampacho", "noticias de Sampacho", "reclamos municipalidad de Sampacho", "residuos Sampacho", "teléfonos útiles Sampacho"],
   manifest: "/manifest.webmanifest",
-  appleWebApp: { capable: true, title: "Sampacho Conecta", statusBarStyle: "default" },
+  appleWebApp: { capable: true, title: SITE_NAME, statusBarStyle: "default" },
+  openGraph: { type: "website", locale: "es_AR", siteName: SITE_NAME, title: `${SITE_NAME} · ${SITE_TAGLINE}`, description: SITE_DESCRIPTION, url: "/" },
+  twitter: { card: "summary_large_image", title: `${SITE_NAME} · ${SITE_TAGLINE}`, description: SITE_DESCRIPTION },
+  // Solo el sitio real (SITE_INDEXING=on) se ofrece a Google. El de ejemplo y las previews quedan fuera.
+  robots: INDEXABLE
+    ? { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } }
+    : { index: false, follow: false },
+  verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {

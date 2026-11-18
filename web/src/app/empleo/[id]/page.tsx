@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { MessageCircle, Phone } from "lucide-react";
 import { getUser } from "@/lib/auth";
 import { getJob } from "@/lib/jobs";
-import { fmtDate, telLink, timeAgo, waLink } from "@/lib/format";
+import { clamp, fmtDate, telLink, timeAgo, waLink } from "@/lib/format";
 import { hideJob, renewJob, toggleJobFilled } from "@/actions/empleo";
 import { Avatar, Container, Pill } from "@/components/ui/bits";
 import { btn, ExtLink } from "@/components/ui/Button";
@@ -17,7 +17,17 @@ type Ctx = {
 };
 export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: Ctx): Promise<Metadata> {
-    return { title: (await getJob(Number((await params).id)))?.title ?? "Aviso" };
+    const id = Number((await params).id);
+    const j = Number.isInteger(id) ? await getJob(id) : undefined;
+    if (!j)
+        return { title: "Aviso", robots: { index: false } };
+    const description = clamp(j.body.replace(/\s+/g, " "), 155);
+    return {
+        title: `${j.title} · ${j.kind === "oferta" ? "empleo" : "busco trabajo"} en Sampacho`, description,
+        alternates: { canonical: `/empleo/${id}` },
+        // Un aviso ya cubierto o vencido deja de ofrecerse en los resultados.
+        ...(j.effective === "abierta" ? {} : { robots: { index: false, follow: true } }),
+    };
 }
 export default async function Page({ params }: Ctx) {
     const id = Number((await params).id);

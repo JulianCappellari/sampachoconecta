@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { homeJsonLd } from "@/lib/seo";
 import { HandHelping, Megaphone, Pill as PillIcon, Wrench } from "lucide-react";
 import { getUser } from "@/lib/auth";
 import { siteStats } from "@/lib/data";
@@ -12,6 +15,7 @@ import { CountUp } from "@/components/motion/CountUp";
 import { Aurora, Magnet, ScrollWords, Spotlight } from "@/components/motion/Effects";
 import { HoySection } from "@/components/hoy/HoySection";
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 const MARQUEE = ["Noticias", "Ventas", "Eventos", "Comercios", "Oficios", "Pedidos", "Reclamos", "Ideas vecinales", "Farmacia de turno", "Teléfonos útiles", "Agenda del pueblo"];
 const QUICK = [
     { href: "/utiles", icon: PillIcon, title: "Farmacia de turno", text: "La de hoy, con teléfono" },
@@ -26,6 +30,7 @@ export default async function Home() {
     const hoy = await getHoy(zones);
     const stats = await siteStats();
     return (<>
+      <JsonLd data={homeJsonLd()}/>
       <noscript>
         <style>{`.h-line>span{transform:none!important;animation:none!important}.h-fade{opacity:1!important;transform:none!important;animation:none!important}`}</style>
       </noscript>

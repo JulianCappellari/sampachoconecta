@@ -3,7 +3,7 @@ import { ShieldCheck } from "lucide-react";
 import { MIN_CELL, transparency } from "@/lib/transparency";
 import { Container, PageHeader } from "@/components/ui/bits";
 import { CountUp } from "@/components/motion/CountUp";
-export const metadata: Metadata = { title: "Transparencia" };
+export const metadata: Metadata = { title: "Transparencia: reclamos resueltos en Sampacho", description: "Cuántos reclamos recibe y resuelve la municipalidad de Sampacho y cuánto tarda, en datos agregados y sin identificar a nadie.", alternates: { canonical: "/transparencia" } };
 export const dynamic = "force-dynamic";
 const days = (d: number | null) => (d == null ? "—" : d < 1 ? "menos de 1 día" : `${d.toFixed(1).replace(".", ",")} días`);
 const monthLabel = (m: string) => new Intl.DateTimeFormat("es-AR", { month: "short", year: "2-digit", timeZone: "UTC" }).format(new Date(`${m}-01T00:00:00Z`)).replace(".", "");

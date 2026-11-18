@@ -9,7 +9,7 @@ import { inputCls } from "@/components/ui/Fields";
 import { btn, LinkButton } from "@/components/ui/Button";
 import { Container, EmptyState, PageHeader } from "@/components/ui/bits";
 import { PostCard } from "@/components/muro/PostCard";
-export const metadata: Metadata = { title: "Muro" };
+export const metadata: Metadata = { title: "Muro de novedades de Sampacho", description: "Noticias, eventos, ventas, avisos oficiales, perdidos y encontrados y ofertas de empleo de Sampacho, publicados por los vecinos y la municipalidad.", alternates: { canonical: "/muro" } };
 export const dynamic = "force-dynamic";
 const PER = 10;
 export default async function Page({ searchParams }: {

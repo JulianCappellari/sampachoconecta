@@ -9,7 +9,7 @@ import { daysUntil, kindLabel, slotsForZone } from "@/lib/waste";
 import { cn } from "@/lib/cn";
 import { FollowButton } from "@/components/ui/FollowButton";
 import { Container, EmptyState, PageHeader } from "@/components/ui/bits";
-export const metadata: Metadata = { title: "Recolección de residuos" };
+export const metadata: Metadata = { title: "Recolección de residuos en Sampacho: días y zonas", description: "Qué día pasa el camión de residuos por tu zona en Sampacho: común, reciclables, residuos verdes y voluminosos.", alternates: { canonical: "/residuos" } };
 export const dynamic = "force-dynamic";
 export default async function Page({ searchParams }: {
     searchParams: Promise<{

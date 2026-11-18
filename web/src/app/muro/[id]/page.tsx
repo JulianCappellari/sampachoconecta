@@ -25,14 +25,31 @@ import { LikeButton } from "@/components/muro/LikeButton";
 import { Comments } from "@/components/muro/Comments";
 import { LinkButton } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { JsonLd, breadcrumbs } from "@/components/seo/JsonLd";
+import { eventJsonLd, shareImages } from "@/lib/seo";
+import { abs } from "@/lib/site";
+import { clamp } from "@/lib/format";
 type Ctx = {
     params: Promise<{
         id: string;
     }>;
 };
 export async function generateMetadata({ params }: Ctx): Promise<Metadata> {
-    const p = await getPost(Number((await params).id));
-    return { title: p?.title ?? "Publicación", description: p?.body.slice(0, 150) };
+    const id = Number((await params).id);
+    const p = Number.isInteger(id) ? await getPost(id) : undefined;
+    // Una publicación oculta por moderación no ofrece ningún dato a los buscadores.
+    if (!p || (p as unknown as {
+        hidden?: number;
+    }).hidden)
+        return { title: "Publicación", robots: { index: false } };
+    const description = clamp(p.body.replace(/\s+/g, " "), 155);
+    return {
+        title: p.title, description,
+        alternates: { canonical: `/muro/${id}` },
+        openGraph: { type: "article", title: p.title, description, url: `/muro/${id}`, publishedTime: new Date(`${p.created_at.replace(" ", "T")}Z`).toISOString(), images: shareImages(p.photos) },
+        // Los avisos vencidos y los eventos cancelados quedan como archivo, sin posicionarse.
+        ...(p.lifecycle === "cancelled" ? { robots: { index: false, follow: true } } : {}),
+    };
 }
 export default async function Page({ params }: Ctx) {
     const id = Number((await params).id);
@@ -54,7 +71,9 @@ export default async function Page({ params }: Ctx) {
     const comments = await listComments("post", id);
     const path = `/muro/${id}`;
     const waText = `Hola, vi tu publicación "${post.title}" en Sampacho Conecta.`;
+    const eventLd = post.category === "evento" ? eventJsonLd(post, path) : undefined;
     return (<Container narrow className="pb-8">
+      <JsonLd data={[...(eventLd ? [eventLd] : []), breadcrumbs([{ name: "Inicio", url: abs("/") }, { name: "Muro", url: abs("/muro") }, { name: post.title, url: abs(path) }])]}/>
       <article className="grid gap-6 py-8 sm:py-12">
         <div className="flex flex-wrap items-center gap-3" data-reveal>
           <Avatar name={post.author_name} size={48}/>

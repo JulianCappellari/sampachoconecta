@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 import { inputCls } from "@/components/ui/Fields";
 import { LinkButton } from "@/components/ui/Button";
 import { Container, EmptyState, PageHeader, Pill } from "@/components/ui/bits";
-export const metadata: Metadata = { title: "Necesito" };
+export const metadata: Metadata = { title: "Necesito: pedidos a comercios y oficios de Sampacho", description: "Pedí un producto o servicio y los comercios y oficios de Sampacho te responden con su propuesta.", alternates: { canonical: "/necesito" } };
 export const dynamic = "force-dynamic";
 type SP = {
     cat?: string;

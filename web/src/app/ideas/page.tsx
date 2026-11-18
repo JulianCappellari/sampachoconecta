@@ -10,7 +10,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { Container, EmptyState, PageHeader, Pill } from "@/components/ui/bits";
 import { SupportButton } from "@/components/ideas/SupportButton";
 import { Photo } from "@/components/ui/Photo";
-export const metadata: Metadata = { title: "Ideas vecinales" };
+export const metadata: Metadata = { title: "Ideas vecinales de Sampacho", description: "Propuestas de los vecinos para mejorar Sampacho: sumá tu apoyo, ofrecé ayuda y seguí cómo avanzan.", alternates: { canonical: "/ideas" } };
 export const dynamic = "force-dynamic";
 export default async function Page({ searchParams }: {
     searchParams: Promise<{

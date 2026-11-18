@@ -8,7 +8,7 @@ import { Container, PageHeader } from "@/components/ui/bits";
 import { MapView, type MapMarker } from "@/components/maps/MapView";
 import { RatingSummary } from "@/components/guia/ListingCard";
 import { Spotlight } from "@/components/motion/Effects";
-export const metadata: Metadata = { title: "Visitar Sampacho" };
+export const metadata: Metadata = { title: "Qué ver y hacer en Sampacho, Córdoba", description: "Guía para visitar Sampacho: atractivos, fiestas, dónde comer y alojarse, y consejos para turistas.", alternates: { canonical: "/visitar" } };
 export const dynamic = "force-dynamic";
 export default async function Page() {
     const places = await listPlaces();

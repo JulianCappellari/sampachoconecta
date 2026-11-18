@@ -6,7 +6,7 @@ import { listPolls } from "@/lib/polls";
 import { fmtDate } from "@/lib/format";
 import { LinkButton } from "@/components/ui/Button";
 import { Container, EmptyState, PageHeader, Pill } from "@/components/ui/bits";
-export const metadata: Metadata = { title: "Encuestas vecinales" };
+export const metadata: Metadata = { title: "Encuestas vecinales de Sampacho", description: "Consultas abiertas a los vecinos de Sampacho: votá y mirá los resultados.", alternates: { canonical: "/encuestas" } };
 export const dynamic = "force-dynamic";
 export default async function Page() {
     const user = await getUser();

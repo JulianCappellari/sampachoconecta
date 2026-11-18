@@ -11,7 +11,7 @@ import { Container, EmptyState, PageHeader } from "@/components/ui/bits";
 import { Photo } from "@/components/ui/Photo";
 import { Spotlight } from "@/components/motion/Effects";
 import { one } from "@/lib/db";
-export const metadata: Metadata = { title: "Gracias, se resolvió" };
+export const metadata: Metadata = { title: "Gracias, se resolvió: lo que logramos en Sampacho", description: "Pedidos, ideas y publicaciones de Sampacho que se resolvieron gracias a la comunidad.", alternates: { canonical: "/resultados" } };
 export const dynamic = "force-dynamic";
 const LABEL = { pedido: "Pedido resuelto", publicacion: "Publicación cerrada", idea: "Idea realizada" } as const;
 export default async function Page() {

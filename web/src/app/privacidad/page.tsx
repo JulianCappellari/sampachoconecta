@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container, PageHeader } from "@/components/ui/bits";
 
-export const metadata: Metadata = { title: "Privacidad y datos" };
+export const metadata: Metadata = { title: "Privacidad y datos", alternates: { canonical: "/privacidad" } };
 
 export default function Page() {
   const h = "mt-8 text-2xl font-bold";

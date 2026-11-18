@@ -155,6 +155,31 @@ En Vercel → Settings → Domains podés usar el subdominio incluido o agregar 
 
 En [UptimeRobot](https://uptimerobot.com/) podés configurar un monitor HTTP(s) para `https://TU-SITIO/api/salud`, método GET y alerta a tu email, si su plan gratuito vigente alcanza. No se creó un monitor en esta tarea. Elegí una frecuencia moderada: consultar continuamente Neon evita que se suspenda y consume horas de cómputo. Revisá **Vercel Logs/Usage** y **Neon Monitoring/Usage**, sin registrar contraseñas ni textos privados.
 
+## 11 bis. Aparecer en Google (SEO)
+
+La app ya trae lo técnico: título y descripción propios en cada página pública, `robots.txt`, `sitemap.xml` con las fichas, publicaciones, ideas y avisos vigentes, imagen para compartir en WhatsApp/redes, y datos estructurados (comercio local con horarios y calificaciones, eventos y migas de pan). Los reclamos y las áreas privadas llevan `noindex` y nunca entran al sitemap.
+
+**El sitio de ejemplo no debe indexarse** (tiene datos de prueba). Por eso la indexación está apagada por defecto: solo se enciende con variables, y solo en el proyecto **real**.
+
+| Variable (proyecto real) | Valor |
+|---|---|
+| `SITE_URL` | Tu dirección exacta, con `https://` y sin barra final (ej. `https://sampachoconecta.com.ar` o `https://tu-proyecto.vercel.app`) |
+| `SITE_INDEXING` | `on` |
+| `GOOGLE_SITE_VERIFICATION` | Opcional: el código de verificación de Search Console (ver abajo) |
+
+Dejá estas tres **sin definir** en el proyecto de ejemplo: así devuelve `noindex` en todas las páginas, un `robots.txt` que bloquea todo y un sitemap vacío. Después de cambiar variables, hacé **Redeploy** (el bloqueo se aplica al compilar).
+
+Pasos en Google, una sola vez:
+1. Entrá a [Search Console](https://search.google.com/search-console) con tu cuenta de Google y elegí **Agregar propiedad → Prefijo de URL**, con la dirección exacta del sitio real.
+2. Elegí verificar con **Etiqueta HTML** y copiá solo el valor de `content="…"`. Pegalo en `GOOGLE_SITE_VERIFICATION` en Vercel, hacé Redeploy y apretá **Verificar**.
+3. En **Sitemaps** agregá `sitemap.xml`.
+4. En la barra superior pegá la portada, esperá el análisis y usá **Solicitar indexación**.
+5. Creá gratis un perfil de [Google Business Profile](https://www.google.com/business/) para "Sampacho Conecta" o la municipalidad, con el enlace al sitio: ayuda en las búsquedas locales.
+
+Comprobá el resultado abriendo `TU-SITIO/robots.txt` (debe decir `Allow: /` y mostrar el sitemap), `TU-SITIO/sitemap.xml` (debe listar páginas) y probando una ficha de comercio en la [Prueba de resultados enriquecidos](https://search.google.com/test/rich-results).
+
+Qué esperar: Google tarda de días a semanas en indexar y no hay garantía de posición. Ayudan mucho un **dominio propio** (un `.com.ar` rinde mejor que un subdominio de Vercel), enlaces desde la web de la municipalidad y redes del pueblo, y contenido nuevo seguido (comercios cargados, novedades, agenda).
+
 ## 12. Respaldo y restauración
 
 Neon Free ofrece hasta **6 horas de historial**, limitado a **1 GB de cambios** por proyecto según [los planes vigentes](https://neon.com/docs/introduction/plans). La ventana efectiva puede ser menor. En Console → Branches/Restore elegí el punto disponible, conservá el estado actual en otra rama y probá la restauración antes de cambiar la app. Confirmá el resultado con un entorno aislado. Esta ventana no reemplaza una copia independiente y **no incluye Blob**.

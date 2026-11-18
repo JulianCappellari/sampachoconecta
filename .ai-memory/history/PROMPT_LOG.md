@@ -28,3 +28,4 @@ P-20261118-013 | 2026-11-18 America/Buenos_Aires | Codex | T-20261118-013 | Ejec
 | P-20261118-014 | 2026-11-18 America/Buenos_Aires | Codex | T-20261118-013 | Continuar el trabajo de migración después de la interrupción | Conservar alcance: verificaciones, guía, memoria y commits locales; sin push/deploy | Continuación ejecutada; instalación previamente detenida por revisión automática por límite de uso luego completada | [sesión](../sessions/2026-11/20261118-T-20261118-013-codex.md) |
 
 Resultado final P-20261118-013/014: implementación/guía/checks locales completados en a8728da y 21ff8f1; validación global PARTIAL por variantes manuales y servicios/dispositivos reales no comprobados. Sin push/deploy; detalle en sesión y QA.
+- P-20261118-014: pedido de mejorar el SEO para aparecer en Google. Se implementó SEO técnico con indexación solo en el sitio real; guía en docs/DESPLIEGUE_VERCEL.md (sección 11 bis).

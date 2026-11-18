@@ -5,7 +5,7 @@ import { Landmark, Lock, Users } from "lucide-react";
 import { getUser } from "@/lib/auth";
 import { IDEA_STATUS, ideaStatus } from "@/lib/constants";
 import { getIdea, listComments } from "@/lib/data";
-import { timeAgo } from "@/lib/format";
+import { clamp, timeAgo } from "@/lib/format";
 import { setGroupLink, setIdeaStatus, toggleMunicipal } from "@/actions/ideas";
 import { Card, Container, PageHeader, Pill } from "@/components/ui/bits";
 import { ExtLink, btn } from "@/components/ui/Button";
@@ -23,8 +23,16 @@ type Ctx = {
     }>;
 };
 export async function generateMetadata({ params }: Ctx): Promise<Metadata> {
-    const i = await getIdea(Number((await params).id));
-    return { title: i?.title ?? "Idea", description: i?.body.slice(0, 150) };
+    const id = Number((await params).id);
+    const i = Number.isInteger(id) ? await getIdea(id) : undefined;
+    if (!i)
+        return { title: "Idea", robots: { index: false } };
+    const description = clamp(i.body.replace(/\s+/g, " "), 155);
+    return {
+        title: `${i.title} · idea vecinal`, description,
+        alternates: { canonical: `/ideas/${id}` },
+        openGraph: { type: "article", title: i.title, description, url: `/ideas/${id}` },
+    };
 }
 export default async function Page({ params }: Ctx) {
     const id = Number((await params).id);

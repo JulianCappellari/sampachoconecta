@@ -6,7 +6,7 @@ import { clamp, eventParts } from "@/lib/format";
 import { LinkButton } from "@/components/ui/Button";
 import { Container, EmptyState, PageHeader } from "@/components/ui/bits";
 import { btn } from "@/components/ui/Button";
-export const metadata: Metadata = { title: "Agenda" };
+export const metadata: Metadata = { title: "Agenda de eventos de Sampacho", description: "Los próximos eventos, fiestas y actividades de Sampacho, Córdoba.", alternates: { canonical: "/agenda" } };
 export const dynamic = "force-dynamic";
 export default async function Page() {
     const events = await upcomingEvents(60);

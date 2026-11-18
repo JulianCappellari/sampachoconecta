@@ -5,7 +5,7 @@ import { listPhones, pharmacyToday, pharmacyUpcoming } from "@/lib/data";
 import { eventParts, telLink } from "@/lib/format";
 import { ExtLink } from "@/components/ui/Button";
 import { Container, PageHeader } from "@/components/ui/bits";
-export const metadata: Metadata = { title: "Teléfonos útiles" };
+export const metadata: Metadata = { title: "Farmacia de turno y teléfonos útiles de Sampacho", description: "La farmacia de turno de hoy en Sampacho, teléfonos de emergencias, municipalidad, salud y servicios.", alternates: { canonical: "/utiles" } };
 export const dynamic = "force-dynamic";
 export default async function Page() {
     const phones = await listPhones();

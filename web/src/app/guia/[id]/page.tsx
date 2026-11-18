@@ -18,6 +18,10 @@ import { RatingSummary } from "@/components/guia/ListingCard";
 import { ShareButton } from "@/components/ui/ShareButton";
 import { btn } from "@/components/ui/Button";
 import { FeaturedApply } from "@/components/guia/FeaturedApply";
+import { JsonLd, breadcrumbs } from "@/components/seo/JsonLd";
+import { listingJsonLd, shareImages } from "@/lib/seo";
+import { abs } from "@/lib/site";
+import { clamp } from "@/lib/format";
 type Ctx = {
     params: Promise<{
         id: string;
@@ -27,8 +31,17 @@ type Ctx = {
     }>;
 };
 export async function generateMetadata({ params }: Ctx): Promise<Metadata> {
-    const l = await getListing(Number((await params).id));
-    return { title: l?.name ?? "Ficha", description: l?.description.slice(0, 150) };
+    const id = Number((await params).id);
+    const l = Number.isInteger(id) ? await getListing(id) : undefined;
+    if (!l)
+        return { title: "Ficha", robots: { index: false } };
+    const title = `${l.name} · ${l.category} en Sampacho`;
+    const description = clamp(`${l.description}${l.address ? ` Dirección: ${l.address}.` : ""}`, 155);
+    return {
+        title, description,
+        alternates: { canonical: `/guia/${id}` },
+        openGraph: { type: "website", title, description, url: `/guia/${id}`, images: shareImages(l.photos) },
+    };
 }
 export default async function Page({ params, searchParams }: Ctx) {
     const id = Number((await params).id);
@@ -45,6 +58,7 @@ export default async function Page({ params, searchParams }: Ctx) {
     const path = `/guia/${id}`;
     const dir = l.lat != null && l.lng != null ? `https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lng}` : null;
     return (<Container className="pb-8">
+      <JsonLd data={[listingJsonLd(l, path), breadcrumbs([{ name: "Inicio", url: abs("/") }, { name: trade ? "Oficios" : "Guía de comercios", url: abs(trade ? "/oficios" : "/guia") }, { name: l.name, url: abs(path) }])]}/>
       <div className="pt-8 sm:pt-12" data-reveal>
         <Link href={trade ? "/oficios" : "/guia"} className="font-bold text-monte hover:underline">← {trade ? "Oficios" : "Guía de comercios"}</Link>
       </div>

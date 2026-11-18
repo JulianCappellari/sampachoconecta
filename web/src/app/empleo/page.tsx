@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 import { inputCls } from "@/components/ui/Fields";
 import { LinkButton } from "@/components/ui/Button";
 import { Container, EmptyState, PageHeader, Pill } from "@/components/ui/bits";
-export const metadata: Metadata = { title: "Bolsa de trabajo" };
+export const metadata: Metadata = { title: "Bolsa de trabajo de Sampacho", description: "Ofertas de empleo y personas que buscan trabajo en Sampacho, Córdoba. Publicá o respondé de forma gratuita.", alternates: { canonical: "/empleo" } };
 export const dynamic = "force-dynamic";
 type SP = {
     tipo?: string;
