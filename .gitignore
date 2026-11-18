@@ -6,7 +6,7 @@ build/
 *.tsbuildinfo
 next-env.d.ts
 
-# Datos locales del prototipo (base SQLite y fotos subidas) y claves
+# Datos locales (incluido el SQLite anterior), fotos, backups y claves
 web/data/
 .env
 .env.*
@@ -22,7 +22,7 @@ npm-debug.log*
 # Copia exportada del documento de diseño (la fuente está en docs/)
 Sampacho Conecta.html
 
-# Despliegue: datos, copias y secretos del servidor
-deploy/data/
-deploy/backups/
-deploy/.env
+# Respaldos privados: nunca subir dumps o exportaciones de vecinos
+*.dump
+*.sql.gz
+backups/

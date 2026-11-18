@@ -21,10 +21,13 @@ Variables de entorno:
 
 | Variable | Para qué |
 |---|---|
-| `SEED_PASSWORD` | Contraseña de **todas** las cuentas de prueba (mínimo 8 caracteres; en producción, 12) |
+| `DATABASE_URL` | Cadena Postgres del destino. Local o Neon pooled; revisá el entorno antes de resetear |
+| `BLOB_READ_WRITE_TOKEN` | Token de un store **privado** y dedicado al entorno; obligatorio en Vercel |
+| `SEED_PASSWORD` | Contraseña de **todas** las cuentas de prueba (si se define, mínimo 12 caracteres; obligatoria en producción) |
 | `ADMIN_PASSWORD` | Contraseña de la cuenta que crea `create-admin` (mínimo 12) |
-| `SAMPACHO_DATA_DIR` | Carpeta donde viven la base `sampacho.db` y las fotos (`uploads/`). Por defecto `web/data` |
-| `SEED_ON_EMPTY=1` | Fuerza el seed automático en una base vacía incluso en producción. **No lo uses** salvo en un entorno descartable |
+| `SAMPACHO_DATA_DIR` | Solo fotos locales de desarrollo (`uploads/`). La base vive en Postgres |
+| `SEED_DISABLE_AUTO=1` | Deshabilita el autoseed de desarrollo. En producción está siempre deshabilitado |
+| `ALLOW_LOCAL_UPLOADS=1` | Solo para probar `next start` en la PC sin Blob. Nunca habilita disco en Vercel |
 | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Avisos al teléfono (opcionales) |
 
 ### Protecciones del comando
@@ -37,17 +40,24 @@ Variables de entorno:
 
 ## 2. Publicar la app para probarla
 
-1. **Elegí un servidor con disco persistente.** La base es un archivo SQLite y las fotos se guardan en disco. En plataformas sin disco persistente (por ejemplo funciones serverless como Vercel), los datos se pierden en cada despliegue. Sirven un VPS, o Railway, Render o Fly.io con un volumen montado.
-2. Configurá `SAMPACHO_DATA_DIR` apuntando al volumen (por ejemplo `/data`).
-3. Compilá e iniciá: `npm ci`, `npm run build`, `npm run start`.
+1. Seguí [la guía Vercel + Neon](DESPLIEGUE_VERCEL.md) para crear los recursos y revisar planes. Usá una base Postgres y un Blob store **privado** separados de los reales.
+2. Configurá `DATABASE_URL` y `BLOB_READ_WRITE_TOKEN` en Vercel y en `.env.local` de la PC desde la que corrés scripts. No los subas a Git. El disco local es solo para desarrollo.
+3. Ejecutá `npm ci`, `npm run db:migrate`, `npm run build`. Vercel inicia sus funciones automáticamente; en la PC usá `npm run start`.
 4. Cargá los datos de prueba, **una vez**:
 
-   ```bash
-   SEED_PASSWORD='una-contraseña-larga-y-unica' npm run seed -- --allow-production
+   ```powershell
+   # Definí antes SEED_PASSWORD en .env.local con 12+ caracteres.
+   $env:NODE_ENV='production'
+   npm run seed -- --allow-production
+   Remove-Item Env:NODE_ENV
    ```
 
 5. Verificá con las cuentas de la sección 3.
 6. Para los avisos al teléfono generá claves VAPID (`node -e "console.log(require('web-push').generateVAPIDKeys())"`) y cargalas como variables de entorno del servidor, nunca en el repositorio. Requieren HTTPS.
+
+Todos los scripts leen `.env.local` sin reemplazar variables ya definidas en la terminal y cierran el pool. La carga de tablas es atómica; las fotos están en un sistema separado y se limpian al fallar en lo posible. Un corte abrupto puede dejar archivos huérfanos. El reset usa un permiso SQL local a su transacción, nunca habilitado por la app normal, para permitir deliberadamente TRUNCATE de reclamos e historial. Al terminar se restablece su protección. **No uses reset sobre datos reales** como método de actualización.
+
+Para conservar el SQLite existente, seguí la sección de importación de la guía; no lo reemplaces con el seed. El estado de las pruebas realizadas en esta migración se informa en [QA_VERCEL_NEON.md](QA_VERCEL_NEON.md); esta guía es el recorrido a ejecutar, no una afirmación de cobertura completa.
 
 ## 3. Cuentas de prueba
 
@@ -98,10 +108,10 @@ Todas con la contraseña que definiste en `SEED_PASSWORD`.
 
 Los datos de prueba **no deben quedar** en el sitio real. Para pasar a producción:
 
-1. Detené la app.
-2. Hacé una copia de la carpeta de datos si querés conservar algo.
+1. Preferí un entorno real nuevo y separado del de pruebas. Si reutilizás el de pruebas, cerrá el acceso mientras lo vaciás.
+2. Respaldá Postgres con `pg_dump` y las fotos del store privado si querés conservar algo (ver guía Vercel).
 3. Vaciá la base y las fotos de prueba (**borra todo lo que haya**): `npm run seed -- --reset --yes --no-seed --allow-production`.
-4. Iniciá la app (la base se crea vacía y con el esquema al día).
+4. Aplicá `npm run db:migrate` e iniciá/redeployá la app con las variables del entorno correcto. En producción no carga demostraciones automáticamente.
 5. Creá la primera cuenta real de la municipalidad:
 
    ```bash
@@ -161,4 +171,4 @@ Los datos de prueba **no deben quedar** en el sitio real. Para pasar a producci�
 - [ ] `npm run build` y `npm run start` sin errores.
 - [ ] En el teléfono, instalar la app (PWA) y abrir `/offline` sin señal.
 - [ ] Activar avisos al teléfono en "Qué sigo" (requiere claves VAPID y HTTPS) y emitir una alerta.
-- [ ] Reiniciar el servidor: los datos y las fotos siguen ahí (comprueba el disco persistente).
+- [ ] Reiniciar/redeployar el servidor: los datos y fotos siguen en Postgres y Blob (no en el disco temporal de Vercel).
