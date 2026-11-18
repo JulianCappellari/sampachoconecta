@@ -1,0 +1,23 @@
+# Decisions (append-only ADRs)
+Status: PROPOSED in docs/diseno-sistema.html §12, user approved ADR-01 and ADR-03 direction (2026-11-18).
+- ADR-01 PWA instead of native app (user chose).
+- ADR-02 Modular monolith in Next.js 16 (web/).
+- ADR-03 SQLite prototype first, PostgreSQL/Supabase later, via Drizzle ORM (user chose local prototype first).
+- ADR-04 OpenStreetMap + Leaflet instead of Google Maps (cost).
+- ADR-05 WhatsApp only through links (chat.whatsapp.com / wa.me); no API group creation possible.
+- ADR-06 Own sessions in prototype (scrypt + httpOnly cookie), Supabase Auth in production.
+- ADR-07 (2026-11-18) Disabled Next `cacheComponents`/`partialPrefetching` (scaffold default): app is session+DB driven, all pages dynamic.
+- ADR-08 Used Node built-in `node:sqlite` instead of Drizzle/better-sqlite3 to avoid native builds; thin `all/one/run/tx` helpers in src/lib/db.ts. Revisit (Drizzle+Postgres) for production.
+- ADR-09 Forms: custom `Form` client component sends FormData inside startTransition to avoid React 19 auto-reset wiping inputs on validation errors.
+- ADR-10 Single memorable motion moment: pinned SVG town map w/ ScrollTrigger scrub on home; other motion is light (data-reveal batch, hero entrance, counters).
+- ADR-11 (2026-11-18, IMPLEMENTED, T-20261118-004, Codex): emergencias con líneas cortas verificadas del municipio, sin usar contactos inventados del seed; clima comparando tres modelos globales vía Open-Meteo, síntesis determinista explicable, no IA ni porcentajes de confianza inventados. Consulta/caché 10 min, timeout, fuentes parciales y fallback marcado hasta 2 h. Se preservan stack, DB e identidad actuales. Detalle: docs/EMERGENCIAS_Y_CLIMA.md.
+- ADR-11 Migraciones numeradas (schema_migrations) en db.ts; aditivas, transaccionales, sin borrar datos.
+- ADR-12 Notificaciones internas generadas de forma SINCRÓNICA dentro de la transacción del hecho (sin outbox/worker); dedupe por UNIQUE(user_id,event_key). Email/push NO implementados.
+- ADR-13 Vigencia de avisos/pedidos calculada en lectura (sin depender de cron). Recordatorios de reclamos vencidos se generan al abrir el panel municipal.
+- ADR-14 Concurrencia con columna `version` + UPDATE condicional y UNIQUE; no hay tabla de claves de idempotencia.
+- ADR-15 Zona horaria America/Argentina/Buenos_Aires (UTC−3 fijo). Efectos: Lenis + GSAP SplitText/ScrollTrigger + Motion; React Bits/Aceternity/Magic UI se recrearon a medida (sin dependencias).
+- ADR-16 (2026-11-18) Moderación de contenido: /panel/contenido (moderador y municipio) con LISTA CERRADA en actions/moderacion.ts (post, comment, request, response, listing, idea, outcome, rating). Los reclamos NO están y la migración 3 crea triggers que abortan DELETE en `claims` y `claim_events`. Avisos oficiales solo los retira el municipio. Todo queda en `audit`.
+- ADR-17 (2026-11-18) Migración 4: polls, poll_options, poll_votes, waste_schedule, jobs, tourist_places, featured_listings, push_subscriptions, kv; columnas posts.alert_kind y notifications.pushed_at.
+- ADR-18 Push: web-push se carga de forma perezosa (dynamic import) para que un fallo no tire el sitio; envío con after() tras confirmar; respeta horario de descanso; avisos de reclamos e ideas viajan con texto genérico. Claves VAPID en web/.env.local (gitignored). Entrega real NO verificada.
+- ADR-19 Service worker public/sw.js: cachea estáticos y una lista de páginas públicas; nunca API ni reclamos; se limpia al cambiar de usuario; se registra solo en producción.
+- ADR-20 Destacado de la semana: elección perezosa al leer entre postulados (el que más tiempo lleva sin destacarse); el municipio puede cambiarla. Transparencia oculta categorías con menos de MIN_CELL=3 reclamos.

@@ -1,0 +1,1048 @@
+<title>Sampacho Conecta</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: documento técnico con índice lateral fijo en escritorio; secciones numeradas porque siguen el orden real de un SRS. */
+:root{
+  --bg:#F4F7F5; --surface:#FFFFFF; --surface-2:#E9F0EC; --ink:#13221E; --ink-2:#4A5D56; --line:#D5E0DA;
+  --monte:#0E6B5A; --monte-soft:#D7ECE5; --on-monte:#FFFFFF;
+  --cielo:#2D69C4; --cielo-soft:#DCE7F8;
+  --girasol:#F2B02A; --girasol-soft:#FCEFCF; --on-girasol:#3A2A00;
+  --ok:#1E8A4C; --warn:#A86A00; --err:#C2362C;
+  --code-bg:#EEF3F0;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  /* Tokens fijos de la app para los mockups (tema claro de la app) */
+  --app-bg:#F4F7F5; --app-surface:#FFFFFF; --app-ink:#13221E; --app-ink-2:#5A6B65; --app-line:#E1E8E4;
+  --app-monte:#0E6B5A; --app-girasol:#F2B02A; --app-cielo:#2D69C4; --app-fiesta:#B83C78; --app-naranja:#D9692B; --app-violeta:#6650C9;
+  --app-map:#E8EEE6; --app-street:#FFFFFF; --app-block:#DCE5D8; --app-plaza:#B9DBB0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1513; --surface:#14201D; --surface-2:#1A2925; --ink:#E5EEEA; --ink-2:#A2B5AE; --line:#293B36;
+    --monte:#45C2A2; --monte-soft:#163A32; --on-monte:#06201A;
+    --cielo:#7AA7F0; --cielo-soft:#1A2B45;
+    --girasol:#F5C452; --girasol-soft:#3A2F14; --on-girasol:#2A1E00;
+    --ok:#4CC27F; --warn:#E5A93A; --err:#F07468; --code-bg:#17241F;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1513; --surface:#14201D; --surface-2:#1A2925; --ink:#E5EEEA; --ink-2:#A2B5AE; --line:#293B36;
+  --monte:#45C2A2; --monte-soft:#163A32; --on-monte:#06201A;
+  --cielo:#7AA7F0; --cielo-soft:#1A2B45;
+  --girasol:#F5C452; --girasol-soft:#3A2F14; --on-girasol:#2A1E00;
+  --ok:#4CC27F; --warn:#E5A93A; --err:#F07468; --code-bg:#17241F;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.6;}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;line-height:1.15;margin:0}
+h2{font-size:2rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.3rem;font-weight:700;margin-top:8px}
+h4{font-size:1.05rem;font-weight:700}
+p{margin:0;max-width:68ch}
+a{color:var(--cielo)}
+code,.mono{font-family:var(--f-mono);font-size:.88em}
+code{background:var(--code-bg);padding:1px 6px;border-radius:6px}
+:focus-visible{outline:3px solid var(--cielo);outline-offset:2px}
+
+/* Cabecera */
+.masthead{border-bottom:1px solid var(--line);background:var(--surface)}
+.masthead .wrap{padding-block:40px 36px;display:grid;gap:28px;grid-template-columns:auto 1fr;align-items:center}
+.masthead .meta{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--ink-2);font-size:.92rem;margin-top:14px}
+.masthead .meta span{display:inline-flex;gap:6px;align-items:center}
+.masthead .lede{margin-top:14px;font-size:1.12rem;color:var(--ink-2)}
+.wordmark{display:flex;align-items:center;gap:14px}
+.wordmark .wm{font-family:var(--f-display);font-size:2.6rem;line-height:1;letter-spacing:-.02em}
+.wordmark .wm b{font-weight:800;color:var(--ink)}
+.wordmark .wm i{font-style:normal;font-weight:500;color:var(--monte)}
+@media (max-width:720px){.masthead .wrap{grid-template-columns:1fr}.wordmark .wm{font-size:2rem}}
+
+/* Estructura documento */
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:48px;padding-block:40px 80px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 20px);align-self:start;font-size:.92rem}
+nav.toc .lbl{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-bottom:10px;font-weight:700}
+nav.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:2px;counter-reset:t}
+nav.toc li{counter-increment:t}
+nav.toc a{display:flex;gap:10px;padding:6px 10px;border-radius:8px;color:var(--ink);text-decoration:none}
+nav.toc a::before{content:counter(t, decimal-leading-zero);font-family:var(--f-mono);color:var(--ink-2);font-size:.8rem;padding-top:2px}
+nav.toc a:hover{background:var(--surface-2)}
+nav.toc .grp{margin-top:14px;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--monte);font-weight:700;padding-left:10px;counter-increment:none}
+@media (max-width:980px){.layout{grid-template-columns:1fr;gap:24px}nav.toc{position:static;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}nav.toc ol{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}
+
+main{display:grid;gap:72px;min-width:0}
+section{display:grid;gap:18px;min-width:0;scroll-margin-top:20px}
+.eyebrow{font-family:var(--f-mono);font-size:.8rem;color:var(--monte);letter-spacing:.04em}
+.sec-head{display:grid;gap:6px;padding-bottom:14px;border-bottom:2px solid var(--ink)}
+.part{font-family:var(--f-display);font-weight:800;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:12px}
+.part::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:grid;gap:8px;align-content:start;min-width:0}
+.box p{color:var(--ink-2);font-size:.96rem}
+.note{background:var(--girasol-soft);border-radius:12px;padding:14px 18px;font-size:.96rem}
+.note b{color:var(--on-girasol)}
+:root:not([data-theme="light"]) .note b{color:var(--girasol)}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .note b{color:var(--on-girasol)}}
+:root[data-theme="light"] .note b{color:var(--on-girasol)}
+ul.clean{margin:0;padding-left:20px;display:grid;gap:6px}
+ul.clean li{max-width:68ch}
+
+/* Módulos */
+.mod{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:grid;gap:10px;align-content:start;min-width:0}
+.mod header{display:flex;align-items:center;gap:12px}
+.mod .ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex:none;background:var(--monte-soft);color:var(--monte)}
+.mod .ico svg{width:22px;height:22px}
+.mod p{color:var(--ink-2);font-size:.95rem}
+.mod ul{margin:0;padding-left:18px;font-size:.93rem;display:grid;gap:3px}
+.phase{display:inline-block;font-family:var(--f-mono);font-size:.72rem;padding:2px 8px;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
+.f1{color:var(--monte)} .f2{color:var(--cielo)} .f3{color:var(--warn)}
+
+/* Tablas */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-display);font-weight:700;background:var(--surface-2);font-size:.85rem;letter-spacing:.02em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--f-mono);font-size:.82rem;white-space:nowrap;color:var(--ink-2)}
+td.mod-c{white-space:nowrap;font-weight:700}
+.perm td{text-align:center}
+.perm td:first-child{text-align:left}
+.y{color:var(--ok);font-weight:700}.n{color:var(--ink-2)}.p{color:var(--warn);font-weight:700}
+
+/* Casos de uso */
+details.uc{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+details.uc summary{cursor:pointer;padding:14px 18px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;font-family:var(--f-display);font-weight:700;font-size:1.05rem}
+details.uc summary .mono{color:var(--monte);font-weight:500}
+details.uc .body{padding:0 18px 18px;display:grid;gap:12px}
+details.uc dl{display:grid;grid-template-columns:150px 1fr;gap:6px 16px;margin:0;font-size:.94rem}
+details.uc dt{font-weight:700;color:var(--ink-2)}
+details.uc dd{margin:0;min-width:0}
+details.uc ol{margin:0;padding-left:22px;display:grid;gap:4px}
+@media (max-width:600px){details.uc dl{grid-template-columns:1fr}details.uc dd{margin-bottom:6px}}
+
+/* Diagramas */
+.diagram{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;overflow-x:auto}
+.diagram .cap{font-size:.85rem;color:var(--ink-2);margin-bottom:10px;font-family:var(--f-mono)}
+pre.mermaid{margin:0;background:transparent;font-family:var(--f-body)}
+pre.tree{margin:0;font-family:var(--f-mono);font-size:.84rem;line-height:1.55;background:var(--code-bg);padding:18px;border-radius:12px;overflow-x:auto;color:var(--ink)}
+pre.tree .c{color:var(--ink-2)}
+
+/* Marca */
+.brand-hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.logo-tile{border-radius:16px;padding:28px;display:grid;place-items:center;min-height:190px;border:1px solid var(--line);position:relative}
+.logo-tile .tag{position:absolute;left:14px;bottom:10px;font-family:var(--f-mono);font-size:.72rem}
+.lt-light{background:#FFFFFF}.lt-light .tag{color:#5A6B65}
+.lt-dark{background:#0F2420}.lt-dark .tag{color:#9FC2B7}
+.lt-monte{background:#0E6B5A}.lt-monte .tag{color:#CFEDE4}
+.lt-mono{background:#F2B02A}.lt-mono .tag{color:#3A2A00}
+.wm-fixed{font-family:var(--f-display);font-size:2rem;letter-spacing:-.02em;line-height:1;display:flex;align-items:center;gap:12px}
+.wm-fixed b{font-weight:800}.wm-fixed i{font-style:normal;font-weight:500}
+.construct{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:14px}
+.construct .box{text-align:center;justify-items:center}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px}
+.sw{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--surface);display:grid}
+.sw .chip{height:96px;padding:12px;display:flex;align-items:flex-end;font-family:var(--f-display);font-weight:700;font-size:1.05rem}
+.sw .info{padding:10px 12px;font-size:.84rem;display:grid;gap:2px}
+.sw .info .mono{color:var(--ink-2)}
+.cat-row{display:flex;flex-wrap:wrap;gap:8px}
+.cat{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border-radius:99px;font-size:.88rem;font-weight:700;background:var(--surface);border:1px solid var(--line)}
+.cat i{width:14px;height:14px;border-radius:50%;display:block}
+
+.type-spec{display:grid;gap:12px}
+.ts-row{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line)}
+.ts-row .k{font-family:var(--f-mono);font-size:.78rem;color:var(--ink-2)}
+@media (max-width:600px){.ts-row{grid-template-columns:1fr;gap:4px}}
+.font-card{display:grid;gap:6px}
+.font-card .big{font-size:3.2rem;line-height:1}
+
+/* Componentes demo */
+.comp-demo{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{font-family:var(--f-body);font-weight:700;font-size:1rem;min-height:48px;padding:0 20px;border-radius:12px;border:0;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.btn-pri{background:var(--monte);color:var(--on-monte)}
+.btn-sec{background:var(--surface);color:var(--ink);border:1.5px solid var(--line)}
+.btn-wa{background:#1F8F4E;color:#FFFFFF}
+.btn-acc{background:var(--girasol);color:var(--on-girasol)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:.82rem;font-weight:700}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.st-rec{background:var(--surface-2);color:var(--ink-2)}
+.st-rev{background:var(--cielo-soft);color:var(--cielo)}
+.st-pro{background:var(--girasol-soft);color:var(--warn)}
+.st-ok{background:var(--monte-soft);color:var(--ok)}
+.stars{color:var(--girasol);letter-spacing:2px;font-size:1.15rem}
+.stars small{color:var(--ink-2);letter-spacing:0;font-size:.85rem;margin-left:6px}
+
+/* Mockups de teléfono */
+.phones{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;padding-block:8px}
+.phone-wrap{display:grid;gap:10px;justify-items:center}
+.phone-wrap .cap{font-size:.85rem;color:var(--ink-2);font-family:var(--f-mono)}
+.phone{width:280px;max-width:100%;height:580px;border-radius:38px;border:9px solid #1B1F1E;background:var(--app-bg);color:var(--app-ink);overflow:hidden;display:flex;flex-direction:column;font-family:var(--f-body);font-size:13px;line-height:1.4;box-shadow:0 18px 40px -18px rgba(10,30,25,.45)}
+.ph-status{height:26px;display:flex;justify-content:space-between;align-items:center;padding:0 20px;font-size:11px;font-weight:700;background:var(--app-surface)}
+.ph-top{background:var(--app-surface);padding:6px 14px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--app-line)}
+.ph-top .t{font-family:var(--f-display);font-weight:800;font-size:17px}
+.ph-top .t i{font-style:normal;font-weight:500;color:var(--app-monte)}
+.ph-body{flex:1;overflow:hidden;padding:12px;display:flex;flex-direction:column;gap:10px}
+.ph-nav{display:grid;grid-template-columns:repeat(5,1fr);background:var(--app-surface);border-top:1px solid var(--app-line);padding:6px 4px 10px}
+.ph-nav span{display:grid;justify-items:center;gap:2px;font-size:9.5px;color:var(--app-ink-2);font-weight:700}
+.ph-nav span svg{width:20px;height:20px}
+.ph-nav span.on{color:var(--app-monte)}
+.ph-card{background:var(--app-surface);border:1px solid var(--app-line);border-radius:14px;padding:10px;display:grid;gap:6px}
+.ph-h{font-family:var(--f-display);font-weight:700;font-size:14px}
+.ph-sub{color:var(--app-ink-2);font-size:11.5px}
+.ph-alert{background:var(--app-monte);color:#FFFFFF;border-radius:14px;padding:10px 12px;display:grid;gap:2px}
+.ph-alert small{opacity:.85;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.ph-row{display:flex;gap:8px;align-items:center}
+.ph-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;color:#FFFFFF;display:inline-block}
+.ph-img{height:84px;border-radius:10px;background:linear-gradient(135deg,#F2B02A 0%,#E59A1C 45%,#7FB069 46%,#5E9A4B 100%)}
+.ph-chips{display:flex;gap:6px;overflow:hidden}
+.ph-chip{border:1px solid var(--app-line);background:var(--app-surface);border-radius:99px;padding:4px 10px;font-size:11px;font-weight:700;white-space:nowrap}
+.ph-chip.on{background:var(--app-ink);color:#FFFFFF;border-color:var(--app-ink)}
+.ph-search{background:var(--app-surface);border:1px solid var(--app-line);border-radius:12px;padding:8px 12px;color:var(--app-ink-2);font-size:12px}
+.ph-map{height:200px;border-radius:14px;overflow:hidden;border:1px solid var(--app-line);flex:none}
+.ph-field{display:grid;gap:4px}
+.ph-field label{font-size:11px;font-weight:700}
+.ph-input{background:var(--app-surface);border:1.5px solid var(--app-line);border-radius:10px;padding:8px 10px;color:var(--app-ink-2);font-size:12px}
+.ph-btn{background:var(--app-monte);color:#FFFFFF;border-radius:12px;padding:11px;text-align:center;font-weight:700}
+.ph-btn.wa{background:#1F8F4E}
+.ph-steps{display:grid;gap:0}
+.ph-step{display:grid;grid-template-columns:18px 1fr;gap:8px;font-size:11.5px;padding-bottom:8px;position:relative}
+.ph-step i{width:12px;height:12px;border-radius:50%;margin-top:3px;background:var(--app-line);border:2px solid var(--app-surface);box-shadow:0 0 0 1.5px var(--app-line)}
+.ph-step.done i{background:var(--app-monte);box-shadow:0 0 0 1.5px var(--app-monte)}
+.ph-step.now i{background:var(--app-girasol);box-shadow:0 0 0 1.5px var(--app-girasol)}
+.ph-bar{height:6px;border-radius:99px;background:var(--app-line);overflow:hidden}
+.ph-bar b{display:block;height:100%;background:var(--app-girasol)}
+.ph-stars{color:var(--app-girasol);font-size:12px;letter-spacing:1px}
+
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.principles .box h4{display:flex;gap:10px;align-items:center}
+.principles .box h4 b{font-family:var(--f-mono);font-size:.8rem;color:var(--monte);font-weight:500}
+
+.roadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.roadmap .box h4{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+footer{border-top:1px solid var(--line);padding-block:28px;color:var(--ink-2);font-size:.9rem}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+
+<!-- Símbolo reutilizable del logo -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo-mark" viewBox="0 0 64 64">
+      <path d="M32 3C18.7 3 8 13.6 8 26.8 8 44.2 32 61 32 61s24-16.8 24-34.2C56 13.6 45.3 3 32 3z" fill="var(--lm-pin,#0E6B5A)"/>
+      <path d="M22.5 22.5 L41.5 22.5 L32 37 Z" fill="none" stroke="var(--lm-line,#FFFFFF)" stroke-width="3" stroke-linejoin="round" opacity=".9"/>
+      <circle cx="22.5" cy="22.5" r="6" fill="var(--lm-dot,#FFFFFF)"/>
+      <circle cx="41.5" cy="22.5" r="6" fill="var(--lm-sun,#F2B02A)"/>
+      <circle cx="32" cy="37" r="6" fill="var(--lm-dot,#FFFFFF)"/>
+    </symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-feed" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="8" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></symbol>
+    <symbol id="i-mega" viewBox="0 0 24 24"><path d="M3 10v4h3l7 5V5L6 10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M17 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-3-3 8-8-1.3-1.3zM3 21l6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-8-4.8-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 9c0 6.2-8 11-8 11z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="wordmark">
+      <svg width="76" height="76" aria-hidden="true"><use href="#logo-mark"/></svg>
+    </div>
+    <div>
+      <div class="wordmark"><span class="wm"><b>Sampacho</b> <i>Conecta</i></span></div>
+      <p class="lede">Documento de diseño del sistema: arquitectura, requerimientos, casos de uso, modelo de datos e identidad visual de la plataforma comunitaria de Sampacho.</p>
+      <div class="meta">
+        <span>Versión 1.0</span><span>18 de noviembre de 2026</span><span>Estado: propuesta para validar</span><span>Stack: Next.js 16 · PWA · SQLite → PostgreSQL</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <nav class="toc" aria-label="Índice">
+    <div class="lbl">Contenido</div>
+    <ol>
+      <li class="grp">Producto</li>
+      <li><a href="#vision">Visión y alcance</a></li>
+      <li><a href="#actores">Actores y roles</a></li>
+      <li><a href="#modulos">Módulos y funciones</a></li>
+      <li class="grp">Ingeniería</li>
+      <li><a href="#rf">Requerimientos funcionales</a></li>
+      <li><a href="#rnf">Requerimientos no funcionales</a></li>
+      <li><a href="#rn">Reglas de negocio</a></li>
+      <li><a href="#cu">Casos de uso</a></li>
+      <li><a href="#arq">Arquitectura</a></li>
+      <li><a href="#datos">Modelo de datos</a></li>
+      <li><a href="#flujos">Flujos y estados</a></li>
+      <li><a href="#permisos">Matriz de permisos</a></li>
+      <li><a href="#adr">Decisiones (ADR)</a></li>
+      <li class="grp">Diseño</li>
+      <li><a href="#marca">Logo</a></li>
+      <li><a href="#color">Colorimetría</a></li>
+      <li><a href="#tipo">Tipografía</a></li>
+      <li><a href="#ui">Componentes</a></li>
+      <li><a href="#pantallas">Pantallas</a></li>
+      <li class="grp">Plan</li>
+      <li><a href="#roadmap">Hoja de ruta</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <div class="part">Parte I · Producto</div>
+
+    <section id="vision">
+      <div class="sec-head"><span class="eyebrow">01 · Visión y alcance</span><h2>La plaza del pueblo, en el celular</h2></div>
+      <p>Hoy la información de Sampacho está repartida en grupos de WhatsApp, páginas de Facebook, carteles en el almacén y el boca a boca. Quien llega al pueblo, o quien no está en el grupo correcto, se entera tarde. Sampacho Conecta junta en un solo lugar lo que pasa, quién ofrece qué y cómo pedirle algo al municipio.</p>
+      <div class="grid-3">
+        <div class="box"><h4>Problema</h4><p>Información dispersa, guía telefónica desactualizada, reclamos que se pierden en llamadas o mensajes sin seguimiento, y buenas ideas vecinales que no encuentran gente.</p></div>
+        <div class="box"><h4>Objetivo</h4><p>Que cualquier vecino, de 15 a 85 años, pueda en menos de un minuto enterarse de lo importante, encontrar un comercio o un oficio, y presentar un reclamo con seguimiento.</p></div>
+        <div class="box"><h4>Indicadores de éxito</h4><p>30 % de los hogares registrados en el primer año, 80 % de reclamos con respuesta en menos de 7 días, más de 150 comercios y oficios cargados.</p></div>
+      </div>
+      <div class="grid-2">
+        <div class="box"><h4>Dentro del alcance</h4>
+          <ul class="clean"><li>Muro comunitario con publicaciones, fotos y comentarios.</li><li>Reclamos privados entre vecino y municipio.</li><li>Guía de comercios con mapa y calificaciones.</li><li>Directorio de oficios con calificaciones.</li><li>Ideas vecinales con enlace a grupos de WhatsApp.</li><li>Agenda, teléfonos útiles, farmacia de turno y avisos oficiales.</li></ul></div>
+        <div class="box"><h4>Fuera del alcance (por ahora)</h4>
+          <ul class="clean"><li>Pagos dentro de la app (tasas, compras). Las ventas se cierran por WhatsApp o en persona.</li><li>Mensajería privada propia: se deriva a WhatsApp, que todos ya usan.</li><li>Trámites municipales con firma o expediente.</li><li>Apps nativas en tiendas: se evalúa en fase 3.</li></ul></div>
+      </div>
+    </section>
+
+    <section id="actores">
+      <div class="sec-head"><span class="eyebrow">02 · Actores y roles</span><h2>Quién usa la plataforma</h2></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Actor</th><th>Descripción</th><th>Necesidad principal</th></tr></thead>
+        <tbody>
+          <tr><td class="mod-c">Visitante</td><td>Persona sin cuenta, por ejemplo un turista o alguien que entra por un enlace compartido.</td><td>Ver el muro público, la guía, la agenda y los teléfonos útiles.</td></tr>
+          <tr><td class="mod-c">Vecino</td><td>Usuario registrado. Es el rol base de cualquier cuenta.</td><td>Publicar, comentar, calificar, reclamar y sumarse a ideas.</td></tr>
+          <tr><td class="mod-c">Comerciante / Prestador</td><td>Vecino que administra una o más fichas de comercio u oficio.</td><td>Mantener sus datos al día, responder reseñas, publicar ofertas.</td></tr>
+          <tr><td class="mod-c">Moderador</td><td>Vecino de confianza designado por el municipio o la comisión vecinal.</td><td>Revisar denuncias, ocultar contenido inapropiado y verificar fichas.</td></tr>
+          <tr><td class="mod-c">Municipio (Admin)</td><td>Personal municipal con acceso al panel de gestión.</td><td>Gestionar reclamos, publicar avisos oficiales, cargar farmacias de turno, ver estadísticas.</td></tr>
+          <tr><td class="mod-c">Sistema</td><td>Procesos automáticos programados.</td><td>Vencer avisos de venta, archivar eventos, enviar notificaciones y recordatorios.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="modulos">
+      <div class="sec-head"><span class="eyebrow">03 · Módulos y funciones</span><h2>Lo que va a tener la app</h2></div>
+      <p>Cada módulo indica en qué fase entra. <span class="phase f1">Fase 1 · MVP</span> <span class="phase f2">Fase 2</span> <span class="phase f3">Fase 3</span></p>
+      <div class="grid-2">
+        <article class="mod"><header><span class="ico"><svg><use href="#i-feed"/></svg></span><div><h4>Muro comunitario</h4><span class="phase f1">Fase 1</span></div></header>
+          <p>Publicaciones al estilo red social, ordenadas por categoría.</p>
+          <ul><li>Noticias, ventas, eventos, avisos, perdidos y encontrados, empleo.</li><li>Hasta 4 fotos por publicación, con compresión automática.</li><li>Me gusta, comentarios, compartir por WhatsApp.</li><li>Botón “Consultar por WhatsApp” en ventas.</li><li>Denunciar contenido.</li></ul></article>
+        <article class="mod"><header><span class="ico"><svg><use href="#i-mega"/></svg></span><div><h4>Reclamos al municipio</h4><span class="phase f1">Fase 1</span></div></header>
+          <p>Canal privado: solo lo ven quien reclama y el municipio.</p>
+          <ul><li>Categoría, descripción, fotos y punto en el mapa.</li><li>Número de seguimiento, por ejemplo <code>R-2026-0142</code>.</li><li>Línea de tiempo de estados con respuestas oficiales.</li><li>Bandeja, filtros y mapa de reclamos para el municipio.</li></ul></article>
+        <article class="mod"><header><span class="ico"><svg><use href="#i-pin"/></svg></span><div><h4>Guía de comercios</h4><span class="phase f1">Fase 1</span></div></header>
+          <p>La guía telefónica y el mapa, juntos y actualizados por los propios comercios.</p>
+          <ul><li>Ficha con rubro, dirección, ubicación, teléfono, WhatsApp, horarios y fotos.</li><li>Mapa con pines por rubro y vista en lista.</li><li>Filtro “Abierto ahora” y orden por calificación.</li><li>Calificación de 1 a 5 estrellas con reseña.</li><li>Botones Llamar, WhatsApp y Cómo llegar.</li></ul></article>
+        <article class="mod"><header><span class="ico"><svg><use href="#i-tools"/></svg></span><div><h4>Oficios y servicios</h4><span class="phase f1">Fase 1</span></div></header>
+          <p>Electricistas, gasistas, plomeros, albañiles, jardineros, fleteros, niñeras y más.</p>
+          <ul><li>Rubros, zona de trabajo y teléfono.</li><li>Matrícula visible para gasistas y electricistas.</li><li>Indicador “Atiende urgencias”.</li><li>Calificaciones de vecinos que lo contrataron.</li></ul></article>
+        <article class="mod"><header><span class="ico"><svg><use href="#i-bulb"/></svg></span><div><h4>Ideas y grupos</h4><span class="phase f1">Fase 1</span></div></header>
+          <p>Propuestas vecinales que juntan gente: una huerta comunitaria, arreglar la plaza, un torneo.</p>
+          <ul><li>Proponer, apoyar con “Me sumo” y comentar.</li><li>El creador vincula el enlace de invitación de su grupo de WhatsApp.</li><li>Estados: propuesta, en marcha, realizada.</li><li>El municipio puede marcarla “En estudio”.</li></ul></article>
+        <article class="mod"><header><span class="ico"><svg><use href="#i-phone"/></svg></span><div><h4>Teléfonos útiles y farmacia de turno</h4><span class="phase f1">Fase 1</span></div></header>
+          <p>Lo que se necesita a mano en una urgencia.</p>
+          <ul><li>Policía, bomberos, ambulancia, hospital, municipalidad, cooperativa eléctrica.</li><li>Farmacia de turno del día en la pantalla de inicio.</li><li>Llamada en un toque.</li></ul></article>
+        <article class="mod"><header><span class="ico"><svg><use href="#i-cal"/></svg></span><div><h4>Agenda del pueblo</h4><span class="phase f2">Fase 2</span></div></header>
+          <p>Todos los eventos publicados, en vista de calendario.</p>
+          <ul><li>Fiestas, actos escolares, partidos, misas, ferias.</li><li>“Me interesa” con recordatorio el día anterior.</li><li>Agregar al calendario del teléfono.</li></ul></article>
+        <article class="mod"><header><span class="ico"><svg><use href="#i-bell"/></svg></span><div><h4>Avisos oficiales y alertas</h4><span class="phase f2">Fase 2</span></div></header>
+          <p>Comunicación directa del municipio con notificaciones push.</p>
+          <ul><li>Cortes de agua o luz, alertas por tormenta, cambios de recolección.</li><li>Avisos fijados arriba del muro.</li><li>Cronograma de recolección de residuos por barrio.</li></ul></article>
+        <article class="mod"><header><span class="ico"><svg><use href="#i-heart"/></svg></span><div><h4>Red solidaria</h4><span class="phase f3">Fase 3</span></div></header>
+          <p>Ofrezco y necesito: ropa, muletas, una mano con la mudanza, acompañar a un adulto mayor.</p>
+          <ul><li>Mascotas perdidas con mapa de última vez visto.</li><li>Bolsa de trabajo y changas.</li><li>Voluntariado para instituciones.</li></ul></article>
+        <article class="mod"><header><span class="ico"><svg><use href="#i-shield"/></svg></span><div><h4>Panel municipal y moderación</h4><span class="phase f1">Fase 1</span></div></header>
+          <p>Herramientas para cuidar la convivencia y medir la gestión.</p>
+          <ul><li>Bandeja de reclamos y denuncias.</li><li>Gestión de usuarios, roles y fichas verificadas.</li><li>Encuestas vecinales (fase 3).</li><li>Estadísticas: reclamos por barrio y tiempo de resolución.</li></ul></article>
+      </div>
+    </section>
+
+    <div class="part">Parte II · Ingeniería</div>
+
+    <section id="rf">
+      <div class="sec-head"><span class="eyebrow">04 · Requerimientos funcionales</span><h2>Qué tiene que hacer el sistema</h2></div>
+      <div class="tbl"><table>
+        <thead><tr><th>ID</th><th>Módulo</th><th>Requerimiento</th><th>Fase</th></tr></thead>
+        <tbody>
+<tr><td class="id">RF-01</td><td class="mod-c">Cuentas</td><td>El sistema permite registrarse con nombre, email o celular, barrio y contraseña, y verifica el email o el celular.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-02</td><td class="mod-c">Cuentas</td><td>El usuario inicia y cierra sesión, y recupera la contraseña mediante un enlace temporal.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-03</td><td class="mod-c">Cuentas</td><td>El usuario edita su perfil: foto, nombre, barrio y teléfono. El teléfono es privado salvo que lo publique en una venta o ficha.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-04</td><td class="mod-c">Cuentas</td><td>El administrador asigna los roles Moderador y Municipio, y puede suspender cuentas.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-05</td><td class="mod-c">Muro</td><td>El vecino crea una publicación con categoría, texto y hasta 4 fotos.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-06</td><td class="mod-c">Muro</td><td>Una publicación de tipo Evento incluye fecha, hora y lugar, y aparece en la Agenda.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-07</td><td class="mod-c">Muro</td><td>Una publicación de tipo Venta incluye precio, estado (nuevo o usado) y botón de contacto por WhatsApp; el autor puede marcarla como vendida.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-08</td><td class="mod-c">Muro</td><td>El muro se muestra en orden cronológico con filtros por categoría, búsqueda por texto y carga progresiva.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-09</td><td class="mod-c">Muro</td><td>Los vecinos dan “Me gusta” y comentan publicaciones.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-10</td><td class="mod-c">Muro</td><td>El autor edita o elimina sus publicaciones y comentarios.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-11</td><td class="mod-c">Muro</td><td>Cualquier vecino denuncia una publicación o comentario indicando el motivo.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-12</td><td class="mod-c">Muro</td><td>El municipio publica avisos oficiales con insignia y puede fijarlos arriba del muro con fecha de vencimiento.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-13</td><td class="mod-c">Reclamos</td><td>El vecino crea un reclamo con categoría, descripción, hasta 3 fotos y ubicación marcada en el mapa.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-14</td><td class="mod-c">Reclamos</td><td>El sistema asigna un número de seguimiento único con formato <code>R-AAAA-NNNN</code>.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-15</td><td class="mod-c">Reclamos</td><td>El vecino ve el listado de sus reclamos, el estado actual y el historial con respuestas.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-16</td><td class="mod-c">Reclamos</td><td>El municipio ve todos los reclamos en bandeja y mapa, con filtros por estado, categoría, barrio y fecha.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-17</td><td class="mod-c">Reclamos</td><td>El municipio cambia el estado, asigna un área responsable y escribe una respuesta visible para el vecino.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-18</td><td class="mod-c">Reclamos</td><td>El vecino recibe una notificación cada vez que su reclamo cambia de estado.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-19</td><td class="mod-c">Reclamos</td><td>El vecino califica la resolución (de 1 a 5) cuando el reclamo se cierra.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-20</td><td class="mod-c">Guía</td><td>El vecino registra un comercio con nombre, rubro, descripción, dirección, ubicación en el mapa, teléfono, WhatsApp, horarios, fotos y redes.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-21</td><td class="mod-c">Guía</td><td>La guía muestra un mapa con pines por rubro y una lista, con búsqueda, filtro por rubro, “Abierto ahora” y orden por calificación o cercanía.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-22</td><td class="mod-c">Guía</td><td>La ficha ofrece Llamar, Escribir por WhatsApp y Cómo llegar (abre la app de mapas del teléfono).</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-23</td><td class="mod-c">Guía</td><td>El vecino califica un comercio de 1 a 5 estrellas con una reseña opcional; puede editarla.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-24</td><td class="mod-c">Guía</td><td>El dueño de la ficha responde reseñas públicamente.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-25</td><td class="mod-c">Guía</td><td>El dueño publica ofertas o novedades que se muestran en su ficha y en el muro.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-26</td><td class="mod-c">Guía</td><td>Un moderador verifica la ficha y le otorga la insignia “Verificado”; un vecino puede reclamar la titularidad de una ficha cargada por otro.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-27</td><td class="mod-c">Oficios</td><td>El vecino registra un perfil de oficio con rubros, zona, teléfono, matrícula opcional y disponibilidad para urgencias.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-28</td><td class="mod-c">Oficios</td><td>El directorio lista prestadores por rubro, ordenados por calificación, con filtro “Urgencias”.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-29</td><td class="mod-c">Oficios</td><td>El vecino califica a un prestador con estrellas y reseña.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-30</td><td class="mod-c">Ideas</td><td>El vecino propone una idea con título, descripción, categoría y foto opcional.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-31</td><td class="mod-c">Ideas</td><td>Los vecinos apoyan una idea con “Me sumo” y la comentan; se muestra el contador de apoyos.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-32</td><td class="mod-c">Ideas</td><td>El creador vincula el enlace de invitación de un grupo de WhatsApp y la idea muestra el botón “Unirme al grupo” a quienes se sumaron.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-33</td><td class="mod-c">Ideas</td><td>El creador cambia el estado de la idea (propuesta, en marcha, realizada) y el municipio la marca “En estudio municipal”.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-34</td><td class="mod-c">Agenda</td><td>La agenda muestra eventos por mes y por día; el vecino marca “Me interesa” y recibe un recordatorio.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-35</td><td class="mod-c">Agenda</td><td>El vecino agrega un evento al calendario del teléfono (archivo .ics).</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-36</td><td class="mod-c">Útiles</td><td>La sección muestra teléfonos de emergencia y útiles con llamada en un toque, editables por el municipio.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-37</td><td class="mod-c">Útiles</td><td>El municipio carga el calendario de farmacias de turno y el inicio muestra la del día.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-38</td><td class="mod-c">Útiles</td><td>El municipio publica el cronograma de recolección de residuos por barrio.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-39</td><td class="mod-c">Avisos</td><td>El sistema envía notificaciones push e internas por avisos oficiales, cambios en reclamos y respuestas a comentarios; el usuario elige cuáles recibir.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-40</td><td class="mod-c">Avisos</td><td>El municipio emite una alerta urgente que llega como notificación a todos los usuarios suscriptos.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-41</td><td class="mod-c">Solidaria</td><td>El vecino publica mascotas u objetos perdidos con el último punto donde se vieron, y los marca como encontrados.</td><td><span class="phase f3">F3</span></td></tr>
+<tr><td class="id">RF-42</td><td class="mod-c">Solidaria</td><td>El vecino publica ofrecimientos y pedidos de ayuda, y búsquedas o propuestas de trabajo.</td><td><span class="phase f3">F3</span></td></tr>
+<tr><td class="id">RF-43</td><td class="mod-c">Panel</td><td>Moderadores revisan denuncias y pueden ocultar contenido, advertir o suspender usuarios.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-44</td><td class="mod-c">Panel</td><td>El municipio administra categorías, rubros y contenidos de la sección Útiles.</td><td><span class="phase f1">F1</span></td></tr>
+<tr><td class="id">RF-45</td><td class="mod-c">Panel</td><td>El panel muestra estadísticas: usuarios activos, reclamos por estado y barrio, tiempo medio de resolución.</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-46</td><td class="mod-c">Panel</td><td>El sistema guarda un registro de auditoría de cada acción administrativa (quién, qué, cuándo).</td><td><span class="phase f2">F2</span></td></tr>
+<tr><td class="id">RF-47</td><td class="mod-c">Panel</td><td>El municipio crea encuestas vecinales de una pregunta con resultados visibles al cerrar.</td><td><span class="phase f3">F3</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="rnf">
+      <div class="sec-head"><span class="eyebrow">05 · Requerimientos no funcionales</span><h2>Cómo tiene que funcionar</h2></div>
+      <div class="tbl"><table>
+        <thead><tr><th>ID</th><th>Atributo</th><th>Requerimiento y criterio de aceptación</th></tr></thead>
+        <tbody>
+<tr><td class="id">RNF-01</td><td class="mod-c">Usabilidad</td><td>Un adulto mayor sin experiencia previa presenta un reclamo en menos de 3 minutos (prueba con 5 vecinos de más de 60 años).</td></tr>
+<tr><td class="id">RNF-02</td><td class="mod-c">Accesibilidad</td><td>Cumple WCAG 2.2 nivel AA: contraste mínimo 4.5:1, texto base de 16 px o más, áreas táctiles de 48 × 48 px, navegación por teclado y lector de pantalla.</td></tr>
+<tr><td class="id">RNF-03</td><td class="mod-c">Rendimiento</td><td>La pantalla de inicio carga en menos de 2,5 s (LCP) en un Android de gama baja con 4G; cada imagen pesa menos de 300 KB tras la compresión.</td></tr>
+<tr><td class="id">RNF-04</td><td class="mod-c">Conectividad</td><td>Como PWA, la app funciona con señal débil: muestra el último contenido descargado y los teléfonos útiles sin conexión, y reintenta los envíos pendientes.</td></tr>
+<tr><td class="id">RNF-05</td><td class="mod-c">Compatibilidad</td><td>Funciona en Chrome Android 100+, Safari iOS 16+ y navegadores de escritorio actuales; se puede instalar en la pantalla de inicio.</td></tr>
+<tr><td class="id">RNF-06</td><td class="mod-c">Disponibilidad</td><td>Disponibilidad mensual de 99,5 % en producción; copia de seguridad diaria de la base y de las fotos, con 30 días de retención.</td></tr>
+<tr><td class="id">RNF-07</td><td class="mod-c">Escalabilidad</td><td>Soporta 10.000 usuarios registrados y 500 concurrentes sin cambios de arquitectura.</td></tr>
+<tr><td class="id">RNF-08</td><td class="mod-c">Seguridad</td><td>Contraseñas con hash scrypt o argon2, sesiones en cookie httpOnly, Secure y SameSite, HTTPS obligatorio, protección CSRF en formularios y límite de intentos de inicio de sesión.</td></tr>
+<tr><td class="id">RNF-09</td><td class="mod-c">Autorización</td><td>Cada acción se valida en el servidor según rol y propiedad del recurso; nunca solo en la interfaz.</td></tr>
+<tr><td class="id">RNF-10</td><td class="mod-c">Privacidad</td><td>Cumple la Ley 25.326 de Protección de Datos Personales: consentimiento al registrarse, política de privacidad visible, derecho a descargar y eliminar la cuenta. Las fotos se guardan sin metadatos EXIF (que pueden revelar la ubicación de la casa).</td></tr>
+<tr><td class="id">RNF-11</td><td class="mod-c">Validación</td><td>Toda entrada se valida en el servidor con esquemas (Zod); las imágenes se verifican por contenido real, no por extensión, con máximo de 8 MB antes de comprimir.</td></tr>
+<tr><td class="id">RNF-12</td><td class="mod-c">Anti-abuso</td><td>Límite de publicaciones por usuario (10 por día) y de reseñas; detección de enlaces sospechosos; captcha solo ante comportamiento anómalo.</td></tr>
+<tr><td class="id">RNF-13</td><td class="mod-c">Mantenibilidad</td><td>Código TypeScript estricto, organizado por módulos funcionales, con pruebas unitarias de reglas de negocio y pruebas de extremo a extremo de los flujos críticos (registro, publicar, reclamar, calificar).</td></tr>
+<tr><td class="id">RNF-14</td><td class="mod-c">Portabilidad</td><td>El acceso a datos pasa por una capa de repositorios con ORM, de modo que migrar de SQLite a PostgreSQL no cambia la lógica de negocio.</td></tr>
+<tr><td class="id">RNF-15</td><td class="mod-c">Costo</td><td>La operación del primer año entra en planes gratuitos o de bajo costo (menos de USD 25 por mes); mapas sin licencias pagas.</td></tr>
+<tr><td class="id">RNF-16</td><td class="mod-c">Idioma</td><td>Interfaz en español rioplatense, con voseo y vocabulario local; fechas en formato dd/mm/aaaa y hora de Argentina (UTC−3).</td></tr>
+<tr><td class="id">RNF-17</td><td class="mod-c">Observabilidad</td><td>Registro de errores del servidor y del cliente con alertas por email al administrador técnico.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="rn">
+      <div class="sec-head"><span class="eyebrow">06 · Reglas de negocio</span><h2>Las reglas que protegen la convivencia</h2></div>
+      <div class="tbl"><table>
+        <thead><tr><th>ID</th><th>Regla</th></tr></thead>
+        <tbody>
+<tr><td class="id">RN-01</td><td>Un reclamo solo lo ven su autor, los usuarios con rol Municipio y nadie más. No aparece en el muro ni en búsquedas.</td></tr>
+<tr><td class="id">RN-02</td><td>Cada vecino deja una sola calificación por comercio u oficio; si vuelve a calificar, se actualiza la anterior.</td></tr>
+<tr><td class="id">RN-03</td><td>El dueño de una ficha no puede calificar su propia ficha.</td></tr>
+<tr><td class="id">RN-04</td><td>Una ficha muestra su promedio de estrellas recién a partir de 3 calificaciones; antes muestra “Nuevo”.</td></tr>
+<tr><td class="id">RN-05</td><td>Una publicación que recibe 3 denuncias de usuarios distintos se oculta automáticamente hasta que un moderador la revise.</td></tr>
+<tr><td class="id">RN-06</td><td>Las publicaciones de venta vencen a los 30 días; el autor puede renovarlas.</td></tr>
+<tr><td class="id">RN-07</td><td>Los eventos pasan al archivo al día siguiente de su fecha.</td></tr>
+<tr><td class="id">RN-08</td><td>El enlace de grupo debe empezar con <code>https://chat.whatsapp.com/</code>; cualquier otro se rechaza.</td></tr>
+<tr><td class="id">RN-09</td><td>El botón “Unirme al grupo” se muestra solo a vecinos registrados que tocaron “Me sumo”, para evitar que el enlace circule entre desconocidos.</td></tr>
+<tr><td class="id">RN-10</td><td>Un reclamo cerrado (Resuelto o Rechazado) no se puede reabrir; el vecino puede iniciar uno nuevo vinculado.</td></tr>
+<tr><td class="id">RN-11</td><td>Todo cambio de estado de un reclamo exige un comentario del municipio cuando el nuevo estado es Rechazado.</td></tr>
+<tr><td class="id">RN-12</td><td>Las cuentas nuevas publican en el muro recién después de verificar email o celular.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="cu">
+      <div class="sec-head"><span class="eyebrow">07 · Casos de uso</span><h2>Quién hace qué</h2></div>
+      <div class="diagram">
+        <div class="cap">Diagrama de casos de uso · vista general</div>
+<pre class="mermaid">
+flowchart LR
+  V(["Visitante"])
+  N(["Vecino"])
+  C(["Comerciante / Prestador"])
+  M(["Moderador"])
+  A(["Municipio"])
+  subgraph S["Sampacho Conecta"]
+    UC1["CU-01 Registrarse"]
+    UC2["CU-02 Ver muro, guía y agenda"]
+    UC3["CU-03 Publicar en el muro"]
+    UC4["CU-04 Comentar y dar me gusta"]
+    UC5["CU-05 Presentar reclamo"]
+    UC6["CU-06 Seguir mi reclamo"]
+    UC7["CU-07 Registrar comercio u oficio"]
+    UC8["CU-08 Calificar comercio u oficio"]
+    UC9["CU-09 Proponer idea y vincular grupo"]
+    UC10["CU-10 Sumarse a una idea"]
+    UC11["CU-11 Gestionar reclamos"]
+    UC12["CU-12 Publicar aviso oficial"]
+    UC13["CU-13 Moderar denuncias"]
+    UC14["CU-14 Responder reseñas"]
+  end
+  V --> UC1
+  V --> UC2
+  N --> UC3
+  N --> UC4
+  N --> UC5
+  N --> UC6
+  N --> UC7
+  N --> UC8
+  N --> UC9
+  N --> UC10
+  C --> UC14
+  C --> UC7
+  M --> UC13
+  A --> UC11
+  A --> UC12
+  A --> UC13
+</pre>
+      </div>
+
+      <details class="uc" open><summary><span class="mono">CU-05</span> Presentar reclamo</summary><div class="body"><dl>
+        <dt>Actor</dt><dd>Vecino</dd>
+        <dt>Requerimientos</dt><dd>RF-13, RF-14, RF-15 · RN-01</dd>
+        <dt>Precondición</dt><dd>El vecino inició sesión y verificó su cuenta.</dd>
+        <dt>Flujo principal</dt><dd><ol>
+          <li>El vecino toca “Nuevo reclamo”.</li>
+          <li>El sistema muestra las categorías: alumbrado, calles y baches, residuos, agua y cloacas, arbolado, animales sueltos, ruidos, otro.</li>
+          <li>El vecino elige la categoría, escribe la descripción y adjunta hasta 3 fotos.</li>
+          <li>El sistema propone la ubicación actual en el mapa; el vecino la ajusta o escribe la dirección.</li>
+          <li>El vecino confirma.</li>
+          <li>El sistema valida los datos, comprime las fotos, guarda el reclamo en estado Recibido y genera el número <code>R-2026-0142</code>.</li>
+          <li>El sistema muestra la confirmación con el número y avisa al municipio.</li></ol></dd>
+        <dt>Flujos alternativos</dt><dd><ol>
+          <li>3a. Foto mayor a 8 MB o formato no admitido: el sistema explica el límite y permite elegir otra.</li>
+          <li>4a. El vecino no da permiso de ubicación: marca el punto a mano o escribe la dirección.</li>
+          <li>6a. Sin conexión: el reclamo queda en “Pendiente de envío” y se manda al recuperar señal.</li></ol></dd>
+        <dt>Postcondición</dt><dd>El reclamo existe, visible solo para su autor y el municipio, con historial iniciado.</dd>
+      </dl></div></details>
+
+      <details class="uc"><summary><span class="mono">CU-11</span> Gestionar reclamos</summary><div class="body"><dl>
+        <dt>Actor</dt><dd>Municipio</dd>
+        <dt>Requerimientos</dt><dd>RF-16, RF-17, RF-18 · RN-10, RN-11</dd>
+        <dt>Precondición</dt><dd>El usuario tiene rol Municipio.</dd>
+        <dt>Flujo principal</dt><dd><ol>
+          <li>El agente abre la bandeja de reclamos, ordenada por antigüedad.</li>
+          <li>Filtra por estado, categoría o barrio, o los ve en el mapa.</li>
+          <li>Abre un reclamo y revisa fotos y ubicación.</li>
+          <li>Asigna el área responsable (Obras Públicas, Servicios, Tránsito…) y cambia el estado a En revisión o En proceso.</li>
+          <li>Escribe una respuesta para el vecino.</li>
+          <li>El sistema registra el cambio en el historial, en la auditoría, y notifica al vecino.</li></ol></dd>
+        <dt>Flujos alternativos</dt><dd><ol>
+          <li>4a. Reclamo duplicado: lo vincula con el original y lo cierra como Rechazado con el motivo “Duplicado”.</li>
+          <li>5a. Estado Rechazado sin comentario: el sistema no permite guardar (RN-11).</li></ol></dd>
+        <dt>Postcondición</dt><dd>El reclamo refleja el nuevo estado y el vecino fue notificado.</dd>
+      </dl></div></details>
+
+      <details class="uc"><summary><span class="mono">CU-07</span> Registrar comercio u oficio</summary><div class="body"><dl>
+        <dt>Actor</dt><dd>Vecino (pasa a ser Comerciante / Prestador)</dd>
+        <dt>Requerimientos</dt><dd>RF-20, RF-22, RF-27</dd>
+        <dt>Precondición</dt><dd>Sesión iniciada.</dd>
+        <dt>Flujo principal</dt><dd><ol>
+          <li>El vecino toca “Sumar mi comercio” o “Ofrecer mi oficio”.</li>
+          <li>Completa nombre, rubro, descripción, teléfono y WhatsApp.</li>
+          <li>Para comercios: dirección, pin en el mapa, horarios por día y fotos.</li>
+          <li>Para oficios: zona de trabajo, matrícula si corresponde y si atiende urgencias.</li>
+          <li>El sistema valida el teléfono con formato argentino y publica la ficha con la etiqueta “Nuevo”.</li></ol></dd>
+        <dt>Flujos alternativos</dt><dd><ol>
+          <li>2a. Ya existe una ficha con el mismo nombre y dirección: el sistema la muestra y ofrece reclamar la titularidad.</li></ol></dd>
+        <dt>Postcondición</dt><dd>La ficha aparece en la guía y en el mapa; el usuario la administra desde su perfil.</dd>
+      </dl></div></details>
+
+      <details class="uc"><summary><span class="mono">CU-08</span> Calificar comercio u oficio</summary><div class="body"><dl>
+        <dt>Actor</dt><dd>Vecino</dd>
+        <dt>Requerimientos</dt><dd>RF-23, RF-29 · RN-02, RN-03, RN-04</dd>
+        <dt>Flujo principal</dt><dd><ol>
+          <li>El vecino abre la ficha y toca “Calificar”.</li>
+          <li>Elige de 1 a 5 estrellas y, si quiere, escribe una reseña.</li>
+          <li>El sistema verifica que no sea el dueño, guarda o actualiza su calificación y recalcula el promedio.</li></ol></dd>
+        <dt>Flujos alternativos</dt><dd><ol><li>3a. Es el dueño: el sistema no muestra el botón Calificar.</li></ol></dd>
+      </dl></div></details>
+
+      <details class="uc"><summary><span class="mono">CU-09</span> Proponer idea y vincular grupo de WhatsApp</summary><div class="body"><dl>
+        <dt>Actor</dt><dd>Vecino</dd>
+        <dt>Requerimientos</dt><dd>RF-30, RF-31, RF-32 · RN-08, RN-09</dd>
+        <dt>Flujo principal</dt><dd><ol>
+          <li>El vecino toca “Proponer idea”, escribe título, descripción y elige categoría.</li>
+          <li>El sistema publica la idea; el creador queda sumado automáticamente.</li>
+          <li>Cuando la idea gana apoyo, la app le explica cómo crear un grupo en WhatsApp y copiar el enlace de invitación (WhatsApp no permite que otra app cree grupos).</li>
+          <li>El creador pega el enlace; el sistema valida que sea <code>chat.whatsapp.com</code>.</li>
+          <li>Los vecinos que se suman ven el botón “Unirme al grupo”.</li></ol></dd>
+        <dt>Postcondición</dt><dd>La idea tiene un grupo activo y un contador de vecinos sumados.</dd>
+      </dl></div></details>
+    </section>
+
+    <section id="arq">
+      <div class="sec-head"><span class="eyebrow">08 · Arquitectura</span><h2>Un monolito modular, simple de mantener</h2></div>
+      <p>Para un equipo chico y un pueblo de unos pocos miles de usuarios, lo que más conviene es una sola aplicación Next.js bien dividida en módulos, no microservicios. La interfaz y el servidor viven juntos; la base de datos y el almacenamiento de fotos se cambian de local a la nube sin tocar la lógica de negocio.</p>
+      <div class="diagram">
+        <div class="cap">Diagrama de contexto y contenedores (modelo C4, niveles 1 y 2)</div>
+<pre class="mermaid">
+flowchart TB
+  U["Vecinos y comercios<br/>celular o PC"]
+  MU["Personal municipal<br/>panel web"]
+  subgraph APP["Sampacho Conecta · Next.js 16"]
+    UI["Interfaz PWA<br/>React Server Components<br/>+ componentes cliente"]
+    SA["Server Actions y<br/>Route Handlers"]
+    DOM["Módulos de dominio<br/>muro · reclamos · guía · oficios · ideas · útiles"]
+    AUTH["Autenticación<br/>y permisos"]
+    REPO["Repositorios<br/>Drizzle ORM"]
+    JOBS["Tareas programadas<br/>vencimientos y recordatorios"]
+  end
+  DB[("Base de datos<br/>SQLite en prototipo<br/>PostgreSQL en producción")]
+  ST[("Fotos<br/>disco local en prototipo<br/>Supabase Storage en producción")]
+  OSM["OpenStreetMap<br/>teselas del mapa"]
+  PUSH["Web Push<br/>notificaciones"]
+  MAIL["Email transaccional<br/>verificación y recuperación"]
+  WA["WhatsApp<br/>solo enlaces wa.me y chat.whatsapp.com"]
+  U --> UI
+  MU --> UI
+  UI --> SA
+  SA --> AUTH
+  SA --> DOM
+  DOM --> REPO
+  JOBS --> DOM
+  REPO --> DB
+  DOM --> ST
+  UI --> OSM
+  DOM --> PUSH
+  DOM --> MAIL
+  UI -.-> WA
+</pre>
+      </div>
+      <div class="grid-2">
+        <div class="box"><h4>Stack elegido</h4><ul class="clean">
+          <li><b>Next.js 16</b> con App Router, TypeScript y React 19.</li>
+          <li><b>Tailwind CSS 4</b> con los tokens de diseño de este documento.</li>
+          <li><b>Drizzle ORM</b>: el mismo código sirve para SQLite y PostgreSQL.</li>
+          <li><b>Zod</b> para validar cada formulario en el servidor.</li>
+          <li><b>Leaflet + OpenStreetMap</b> para mapas sin costo ni clave.</li>
+          <li><b>sharp</b> para comprimir fotos a WebP y quitar EXIF.</li>
+          <li><b>Vitest</b> y <b>Playwright</b> para pruebas.</li></ul></div>
+        <div class="box"><h4>Entornos</h4><ul class="clean">
+          <li><b>Prototipo local</b>: SQLite en un archivo, fotos en <code>data/uploads</code>, sesiones propias.</li>
+          <li><b>Producción</b>: Vercel para la app, Supabase para PostgreSQL, almacenamiento y backups. Ambos tienen plan gratuito.</li>
+          <li><b>Dominio</b>: por ejemplo <code>sampachoconecta.com.ar</code>, registrado en NIC Argentina.</li>
+          <li>Variables sensibles solo en <code>.env</code>, nunca en el repositorio.</li></ul></div>
+      </div>
+      <h3>Estructura de carpetas</h3>
+<pre class="tree">web/
+├─ src/
+│  ├─ app/                      <span class="c"># rutas (App Router)</span>
+│  │  ├─ (publico)/             <span class="c"># inicio, muro, guía, agenda, útiles</span>
+│  │  ├─ (cuenta)/ingresar · registro · perfil
+│  │  ├─ reclamos/              <span class="c"># privado: vecino</span>
+│  │  ├─ ideas/
+│  │  ├─ panel/                 <span class="c"># privado: municipio y moderadores</span>
+│  │  ├─ api/fotos/[id]/route.ts
+│  │  └─ manifest.ts            <span class="c"># PWA instalable</span>
+│  ├─ features/                 <span class="c"># un módulo por dominio</span>
+│  │  ├─ muro/        { actions.ts · queries.ts · schema.ts · components/ }
+│  │  ├─ reclamos/    { … }
+│  │  ├─ guia/        { … }     <span class="c"># comercios y oficios comparten "fichas"</span>
+│  │  ├─ ideas/       { … }
+│  │  └─ utiles/      { … }
+│  ├─ lib/
+│  │  ├─ db/          { schema.ts · client.ts · migrations/ }
+│  │  ├─ auth/        { session.ts · password.ts · permisos.ts }
+│  │  ├─ storage/     { local.ts · supabase.ts }   <span class="c"># misma interfaz</span>
+│  │  └─ validacion/
+│  └─ components/ui/            <span class="c"># botones, tarjetas, estrellas, chips</span>
+├─ data/                        <span class="c"># sqlite + fotos (fuera de git)</span>
+└─ tests/  { unit/ · e2e/ }</pre>
+    </section>
+
+    <section id="datos">
+      <div class="sec-head"><span class="eyebrow">09 · Modelo de datos</span><h2>Entidades y relaciones</h2></div>
+      <p>Comercios y oficios comparten una sola entidad, <code>fichas</code>, con un campo <code>tipo</code>. Así comparten mapa, calificaciones, verificación y búsqueda sin duplicar código.</p>
+      <div class="diagram">
+        <div class="cap">Diagrama entidad-relación</div>
+<pre class="mermaid">
+erDiagram
+  USUARIOS ||--o{ SESIONES : abre
+  USUARIOS ||--o{ PUBLICACIONES : publica
+  PUBLICACIONES ||--o{ FOTOS : tiene
+  PUBLICACIONES ||--o{ COMENTARIOS : recibe
+  USUARIOS ||--o{ COMENTARIOS : escribe
+  PUBLICACIONES ||--o{ ME_GUSTA : recibe
+  USUARIOS ||--o{ RECLAMOS : presenta
+  RECLAMOS ||--o{ RECLAMO_EVENTOS : registra
+  USUARIOS ||--o{ FICHAS : administra
+  RUBROS ||--o{ FICHAS : clasifica
+  FICHAS ||--o{ CALIFICACIONES : recibe
+  USUARIOS ||--o{ CALIFICACIONES : deja
+  USUARIOS ||--o{ IDEAS : propone
+  IDEAS ||--o{ APOYOS : recibe
+  USUARIOS ||--o{ APOYOS : da
+  USUARIOS ||--o{ DENUNCIAS : hace
+  USUARIOS {
+    int id PK
+    string nombre
+    string email
+    string telefono
+    string barrio
+    string rol
+    string hash_password
+    datetime verificado_en
+  }
+  PUBLICACIONES {
+    int id PK
+    int autor_id FK
+    string categoria
+    string texto
+    decimal precio
+    datetime evento_fecha
+    string evento_lugar
+    string estado
+    datetime vence_en
+  }
+  RECLAMOS {
+    int id PK
+    string numero
+    int vecino_id FK
+    string categoria
+    string descripcion
+    float lat
+    float lng
+    string estado
+    string area
+  }
+  RECLAMO_EVENTOS {
+    int id PK
+    int reclamo_id FK
+    int autor_id FK
+    string estado_nuevo
+    string comentario
+    datetime creado_en
+  }
+  FICHAS {
+    int id PK
+    string tipo
+    int duenio_id FK
+    int rubro_id FK
+    string nombre
+    string telefono
+    string whatsapp
+    float lat
+    float lng
+    json horarios
+    string matricula
+    bool urgencias
+    bool verificada
+  }
+  CALIFICACIONES {
+    int ficha_id PK
+    int usuario_id PK
+    int estrellas
+    string resenia
+    string respuesta
+  }
+  IDEAS {
+    int id PK
+    int autor_id FK
+    string titulo
+    string descripcion
+    string estado
+    string enlace_grupo
+  }
+</pre>
+      </div>
+      <div class="grid-3">
+        <div class="box"><h4>Índices clave</h4><p><code>publicaciones(categoria, creado_en)</code>, <code>reclamos(estado, creado_en)</code>, <code>fichas(tipo, rubro_id)</code> y clave primaria compuesta en <code>calificaciones</code> para cumplir RN-02.</p></div>
+        <div class="box"><h4>Promedios</h4><p>La ficha guarda <code>promedio</code> y <code>cantidad</code> desnormalizados, recalculados en la misma transacción que la calificación.</p></div>
+        <div class="box"><h4>Borrado</h4><p>Borrado lógico (<code>eliminado_en</code>) en publicaciones y fichas para poder moderar y auditar; la baja de cuenta anonimiza los datos personales.</p></div>
+      </div>
+    </section>
+
+    <section id="flujos">
+      <div class="sec-head"><span class="eyebrow">10 · Flujos y estados</span><h2>El recorrido de un reclamo</h2></div>
+      <div class="grid-2">
+        <div class="diagram">
+          <div class="cap">Diagrama de estados · reclamo</div>
+<pre class="mermaid">
+stateDiagram-v2
+  [*] --> Recibido
+  Recibido --> EnRevision : municipio lo abre
+  EnRevision --> EnProceso : se asigna área
+  EnRevision --> Rechazado : duplicado o no corresponde
+  EnProceso --> Resuelto : trabajo terminado
+  EnProceso --> Rechazado : no se puede resolver
+  Resuelto --> [*]
+  Rechazado --> [*]
+</pre>
+        </div>
+        <div class="diagram">
+          <div class="cap">Diagrama de secuencia · presentar reclamo</div>
+<pre class="mermaid">
+sequenceDiagram
+  actor V as Vecino
+  participant UI as App PWA
+  participant SA as Server Action
+  participant DB as Base de datos
+  participant ST as Fotos
+  participant M as Municipio
+  V->>UI: Completa reclamo y fotos
+  UI->>SA: crearReclamo(datos)
+  SA->>SA: Valida sesión, rol y datos
+  SA->>ST: Comprime y guarda fotos
+  SA->>DB: Inserta reclamo y evento Recibido
+  DB-->>SA: id y número R-2026-0142
+  SA-->>UI: Confirmación
+  SA--)M: Notificación de nuevo reclamo
+  UI-->>V: Muestra número de seguimiento
+</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="permisos">
+      <div class="sec-head"><span class="eyebrow">11 · Matriz de permisos</span><h2>Qué puede hacer cada rol</h2></div>
+      <div class="tbl"><table class="perm">
+        <thead><tr><th>Acción</th><th>Visitante</th><th>Vecino</th><th>Comerciante</th><th>Moderador</th><th>Municipio</th></tr></thead>
+        <tbody>
+<tr><td>Ver muro, guía, agenda y útiles</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+<tr><td>Publicar, comentar, dar me gusta</td><td class="n">No</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+<tr><td>Editar o borrar una publicación</td><td class="n">No</td><td class="p">Propia</td><td class="p">Propia</td><td class="y">Ocultar</td><td class="y">Sí</td></tr>
+<tr><td>Crear reclamo</td><td class="n">No</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td><td class="n">No</td></tr>
+<tr><td>Ver reclamos</td><td class="n">No</td><td class="p">Propios</td><td class="p">Propios</td><td class="n">No</td><td class="y">Todos</td></tr>
+<tr><td>Cambiar estado de reclamo</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="y">Sí</td></tr>
+<tr><td>Crear y editar ficha</td><td class="n">No</td><td class="y">Crear</td><td class="p">Propia</td><td class="y">Verificar</td><td class="y">Sí</td></tr>
+<tr><td>Calificar ficha</td><td class="n">No</td><td class="y">Sí</td><td class="p">Ajena</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+<tr><td>Ver enlace de grupo de WhatsApp</td><td class="n">No</td><td class="p">Si se sumó</td><td class="p">Si se sumó</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+<tr><td>Publicar aviso oficial y farmacias</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="y">Sí</td></tr>
+<tr><td>Resolver denuncias y suspender</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+<tr><td>Asignar roles</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="y">Sí</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="adr">
+      <div class="sec-head"><span class="eyebrow">12 · Decisiones de arquitectura</span><h2>Por qué se eligió cada cosa</h2></div>
+      <div class="tbl"><table>
+        <thead><tr><th>ADR</th><th>Decisión</th><th>Motivo</th><th>Costo aceptado</th></tr></thead>
+        <tbody>
+<tr><td class="id">ADR-01</td><td>Web app instalable (PWA) en lugar de app nativa</td><td>Llega a cualquier celular con un enlace, sin tiendas ni actualizaciones manuales.</td><td>Las notificaciones push en iPhone requieren instalarla en la pantalla de inicio.</td></tr>
+<tr><td class="id">ADR-02</td><td>Monolito modular en Next.js</td><td>Un solo despliegue, un solo lenguaje, fácil de mantener por una o dos personas.</td><td>Si algún módulo crece mucho habrá que separarlo más adelante.</td></tr>
+<tr><td class="id">ADR-03</td><td>SQLite primero, PostgreSQL después, con Drizzle</td><td>Prototipo sin cuentas externas; el ORM hace que la migración sea un cambio de configuración.</td><td>Evitar funciones exclusivas de un motor.</td></tr>
+<tr><td class="id">ADR-04</td><td>OpenStreetMap y Leaflet en lugar de Google Maps</td><td>Gratis, sin clave ni tarjeta; los vecinos pueden mejorar el mapa del pueblo en OSM.</td><td>Menos datos de comercios precargados; los cargamos nosotros.</td></tr>
+<tr><td class="id">ADR-05</td><td>WhatsApp mediante enlaces, no por API</td><td>WhatsApp no permite crear grupos desde otra app y su API comercial es paga y para empresas.</td><td>El creador arma el grupo a mano y pega el enlace.</td></tr>
+<tr><td class="id">ADR-06</td><td>Sesiones propias en el prototipo, Supabase Auth en producción</td><td>Permite avanzar ya; Supabase suma verificación por email y recuperación sin código extra.</td><td>Una migración de usuarios al pasar a producción.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <div class="part">Parte III · Diseño</div>
+
+    <section id="marca">
+      <div class="sec-head"><span class="eyebrow">13 · Logo</span><h2>Un punto en el mapa donde se encuentra la gente</h2></div>
+      <p>El símbolo es un pin de ubicación, porque la app trata de lo que pasa <em>acá</em>. Adentro, tres vecinos unidos por líneas forman una red. Uno de los puntos es amarillo girasol: el sol del campo cordobés y, a la vez, la persona nueva que se suma.</p>
+      <div class="brand-hero">
+        <div class="logo-tile lt-light"><div class="wm-fixed" style="color:#13221E"><svg width="56" height="56" aria-hidden="true"><use href="#logo-mark"/></svg><span><b>Sampacho</b> <i style="color:#0E6B5A">Conecta</i></span></div><span class="tag">Principal · fondo claro</span></div>
+        <div class="logo-tile lt-dark"><div class="wm-fixed" style="color:#E5EEEA;--lm-pin:#45C2A2;--lm-dot:#0F2420;--lm-line:#0F2420"><svg width="56" height="56" aria-hidden="true"><use href="#logo-mark"/></svg><span><b>Sampacho</b> <i style="color:#45C2A2">Conecta</i></span></div><span class="tag">Principal · fondo oscuro</span></div>
+        <div class="logo-tile lt-monte"><div style="width:120px;height:120px;border-radius:28px;background:#FFFFFF;display:grid;place-items:center"><svg width="84" height="84" aria-hidden="true"><use href="#logo-mark"/></svg></div><span class="tag">Ícono de app · 512 px</span></div>
+        <div class="logo-tile lt-mono"><div class="wm-fixed" style="color:#3A2A00;--lm-pin:#3A2A00;--lm-dot:#F2B02A;--lm-line:#F2B02A;--lm-sun:#F2B02A"><svg width="56" height="56" aria-hidden="true"><use href="#logo-mark"/></svg><span><b>Sampacho</b> <i>Conecta</i></span></div><span class="tag">Monocromo · impresos y sellos</span></div>
+      </div>
+      <div class="construct">
+        <div class="box"><svg width="64" height="64" aria-hidden="true"><use href="#logo-mark"/></svg><h4>Tamaño mínimo</h4><p>24 px en pantalla, 10 mm impreso. Debajo de eso, solo el pin sin puntos.</p></div>
+        <div class="box"><h4>Área de respeto</h4><p>Alrededor del logo, un margen libre igual al diámetro de uno de los puntos.</p></div>
+        <div class="box"><h4>Wordmark</h4><p>“Sampacho” en Bricolage Grotesque ExtraBold y “Conecta” en Medium color Monte.</p></div>
+        <div class="box"><h4>No hacer</h4><p>No rotar el pin, no cambiar el punto girasol a otro color, no agregar sombras ni degradés.</p></div>
+      </div>
+    </section>
+
+    <section id="color">
+      <div class="sec-head"><span class="eyebrow">14 · Colorimetría</span><h2>Los colores del monte y del campo</h2></div>
+      <p>La paleta sale del paisaje del sur de Córdoba: el verde oscuro del monte nativo, el amarillo de los girasoles, el azul del cielo abierto de la llanura. Los neutros tienen un leve tinte verde para que todo se sienta de la misma familia. Todos los pares de texto y fondo cumplen contraste AA.</p>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:#0E6B5A;color:#FFFFFF">Monte</div><div class="info"><b>Primario</b><span class="mono">#0E6B5A · oscuro #45C2A2</span><span>Botones principales, enlaces de navegación, marca. Blanco encima: 6,4:1.</span></div></div>
+        <div class="sw"><div class="chip" style="background:#F2B02A;color:#3A2A00">Girasol</div><div class="info"><b>Acento</b><span class="mono">#F2B02A · oscuro #F5C452</span><span>Estrellas, destacados, “nuevo”. Texto siempre en Tierra oscura, nunca blanco.</span></div></div>
+        <div class="sw"><div class="chip" style="background:#2D69C4;color:#FFFFFF">Cielo</div><div class="info"><b>Información</b><span class="mono">#2D69C4 · oscuro #7AA7F0</span><span>Noticias, enlaces en texto, estado “En revisión”.</span></div></div>
+        <div class="sw"><div class="chip" style="background:#13221E;color:#E5EEEA">Tinta</div><div class="info"><b>Texto</b><span class="mono">#13221E · secundario #4A5D56</span><span>Títulos y cuerpo de texto.</span></div></div>
+        <div class="sw"><div class="chip" style="background:#F4F7F5;color:#13221E;border-bottom:1px solid #D5E0DA">Niebla</div><div class="info"><b>Fondo</b><span class="mono">#F4F7F5 · tarjetas #FFFFFF</span><span>Fondo general con tinte verde muy leve.</span></div></div>
+        <div class="sw"><div class="chip" style="background:#0D1513;color:#E5EEEA">Noche</div><div class="info"><b>Fondo oscuro</b><span class="mono">#0D1513 · tarjetas #14201D</span><span>Modo oscuro, para lectura de noche.</span></div></div>
+      </div>
+      <h3>Colores por categoría del muro</h3>
+      <p>Cada categoría tiene un color fijo que se usa en la etiqueta y en el pin del mapa. El color nunca es la única señal: siempre va con el nombre o un ícono.</p>
+      <div class="cat-row">
+        <span class="cat"><i style="background:#0E6B5A"></i>Aviso oficial</span>
+        <span class="cat"><i style="background:#2D69C4"></i>Noticia</span>
+        <span class="cat"><i style="background:#B98200"></i>Venta</span>
+        <span class="cat"><i style="background:#B83C78"></i>Evento</span>
+        <span class="cat"><i style="background:#D9692B"></i>Perdidos y encontrados</span>
+        <span class="cat"><i style="background:#6650C9"></i>Empleo</span>
+      </div>
+      <h3>Colores de estado</h3>
+      <div class="comp-demo">
+        <span class="pill st-rec">Recibido</span><span class="pill st-rev">En revisión</span><span class="pill st-pro">En proceso</span><span class="pill st-ok">Resuelto</span><span class="pill" style="background:var(--surface-2);color:var(--err)">Rechazado</span>
+      </div>
+    </section>
+
+    <section id="tipo">
+      <div class="sec-head"><span class="eyebrow">15 · Tipografía</span><h2>Legible para el abuelo, con carácter para todos</h2></div>
+      <div class="grid-2">
+        <div class="box font-card"><span class="eyebrow">Títulos</span><span class="big" style="font-family:var(--f-display);font-weight:800">Aa Bricolage</span><p>Bricolage Grotesque. Una grotesca con personalidad y algo artesanal, lejos de la estética corporativa. Solo en títulos, marca y números grandes.</p></div>
+        <div class="box font-card"><span class="eyebrow">Texto e interfaz</span><span class="big" style="font-family:var(--f-body);font-weight:700">Aa Atkinson</span><p>Atkinson Hyperlegible, diseñada por el Braille Institute para personas con baja visión. Distingue bien la I, la l y el 1, y la O del 0: clave para teléfonos y direcciones.</p></div>
+      </div>
+      <div class="box font-card"><span class="eyebrow">Datos y códigos</span><span style="font-family:var(--f-mono);font-size:1.4rem">R-2026-0142 · 358 4123456</span><p>IBM Plex Mono para números de reclamo, matrículas y horarios en tablas.</p></div>
+      <h3>Escala tipográfica</h3>
+      <div class="type-spec">
+        <div class="ts-row"><span class="k">Display · 36/40 · 800</span><span style="font-family:var(--f-display);font-weight:800;font-size:36px;line-height:1.1">Fiesta del Inmigrante</span></div>
+        <div class="ts-row"><span class="k">Título 1 · 28/34 · 800</span><span style="font-family:var(--f-display);font-weight:800;font-size:28px;line-height:1.2">Comercios abiertos ahora</span></div>
+        <div class="ts-row"><span class="k">Título 2 · 22/28 · 700</span><span style="font-family:var(--f-display);font-weight:700;font-size:22px">Farmacia de turno</span></div>
+        <div class="ts-row"><span class="k">Cuerpo grande · 18/28 · 400</span><span style="font-size:18px">Mañana se corta el agua en barrio Centro de 8 a 12 h.</span></div>
+        <div class="ts-row"><span class="k">Cuerpo · 16/24 · 400</span><span style="font-size:16px">Vendo bicicleta rodado 26 en buen estado, con luces.</span></div>
+        <div class="ts-row"><span class="k">Etiqueta · 14/20 · 700</span><span style="font-size:14px;font-weight:700">Publicado hace 2 horas · Barrio Norte</span></div>
+      </div>
+      <div class="note"><b>Modo letra grande.</b> Desde el perfil, el vecino puede subir toda la escala un 20 %. La interfaz está armada con unidades relativas para que nada se rompa.</div>
+    </section>
+
+    <section id="ui">
+      <div class="sec-head"><span class="eyebrow">16 · Componentes</span><h2>Piezas de la interfaz</h2></div>
+      <div class="grid-2">
+        <div class="box"><h4>Botones</h4><p>Alto mínimo de 48 px y verbos concretos.</p><div class="comp-demo">
+          <button class="btn btn-pri" type="button">Enviar reclamo</button>
+          <button class="btn btn-sec" type="button">Cancelar</button>
+          <button class="btn btn-wa" type="button">Escribir por WhatsApp</button>
+          <button class="btn btn-acc" type="button">Me sumo</button></div></div>
+        <div class="box"><h4>Calificación</h4><p>Estrellas en Girasol, con promedio y cantidad siempre visibles.</p>
+          <div class="stars" aria-label="4,6 de 5 estrellas">★★★★★<small>4,6 · 38 opiniones</small></div>
+          <div class="stars" aria-label="Sin calificaciones suficientes" style="color:var(--line)">★★★★★<small>Nuevo · 1 opinión</small></div></div>
+        <div class="box"><h4>Espaciado y forma</h4><ul class="clean">
+          <li>Grilla de 4 px; separaciones de 8, 12, 16, 24 y 32.</li>
+          <li>Radio 12 px en botones y campos, 16 px en tarjetas, píldoras completas en etiquetas.</li>
+          <li>Sombras solo en elementos flotantes: menú inferior y hojas emergentes.</li></ul></div>
+        <div class="box"><h4>Navegación</h4><ul class="clean">
+          <li>Barra inferior con 5 destinos: Inicio, Muro, Guía, Reclamos, Más.</li>
+          <li>Botón flotante “Publicar” en el muro.</li>
+          <li>En escritorio, la barra pasa a ser un menú lateral.</li></ul></div>
+      </div>
+      <h3>Principios de experiencia</h3>
+      <div class="principles">
+        <div class="box"><h4><b>P1</b>Un toque para lo urgente</h4><p>Teléfonos de emergencia y farmacia de turno a un toque desde el inicio, aun sin conexión.</p></div>
+        <div class="box"><h4><b>P2</b>Hablar como en el pueblo</h4><p>“Me sumo”, “Sumá tu comercio”, “¿Qué pasó?”. Nada de “Crear entidad” ni “Submit”.</p></div>
+        <div class="box"><h4><b>P3</b>Mostrar el estado siempre</h4><p>Cada reclamo, venta e idea muestra en qué está, con color y texto.</p></div>
+        <div class="box"><h4><b>P4</b>WhatsApp como puente</h4><p>No competimos con WhatsApp: lo usamos para el contacto directo y los grupos.</p></div>
+      </div>
+    </section>
+
+    <section id="pantallas">
+      <div class="sec-head"><span class="eyebrow">17 · Pantallas</span><h2>Cómo se ve en el celular</h2></div>
+      <p>Cuatro pantallas clave en el tema claro. Los datos son ejemplos.</p>
+      <div class="phones">
+
+        <div class="phone-wrap"><div class="phone" role="img" aria-label="Pantalla de inicio">
+          <div class="ph-status"><span>9:41</span><span>4G ▮▮▮</span></div>
+          <div class="ph-top"><span class="ph-row"><svg width="24" height="24" aria-hidden="true"><use href="#logo-mark"/></svg><span class="t">Sampacho <i>Conecta</i></span></span><svg width="20" height="20" aria-hidden="true"><use href="#i-bell"/></svg></div>
+          <div class="ph-body">
+            <div class="ph-alert"><small>Aviso oficial</small><b>Corte de agua mañana en barrio Centro, de 8 a 12 h</b></div>
+            <div class="ph-card"><div class="ph-row" style="justify-content:space-between"><span class="ph-sub" style="font-weight:700">FARMACIA DE TURNO HOY</span><span class="ph-tag" style="background:var(--app-monte)">Abierta</span></div><span class="ph-h">Farmacia del Centro</span><span class="ph-sub">San Martín 450 · Llamar</span></div>
+            <span class="ph-h">Últimas del muro</span>
+            <div class="ph-card"><div class="ph-row"><span class="ph-tag" style="background:var(--app-fiesta)">Evento</span><span class="ph-sub">sáb 22/11 · 20 h</span></div><div class="ph-img"></div><span class="ph-h">Cena a beneficio del club</span><span class="ph-sub">♥ 54 · 12 comentarios</span></div>
+          </div>
+          <div class="ph-nav"><span class="on"><svg><use href="#i-home"/></svg>Inicio</span><span><svg><use href="#i-feed"/></svg>Muro</span><span><svg><use href="#i-pin"/></svg>Guía</span><span><svg><use href="#i-mega"/></svg>Reclamos</span><span><svg><use href="#i-more"/></svg>Más</span></div>
+        </div><span class="cap">Inicio</span></div>
+
+        <div class="phone-wrap"><div class="phone" role="img" aria-label="Guía de comercios con mapa">
+          <div class="ph-status"><span>9:41</span><span>4G ▮▮▮</span></div>
+          <div class="ph-top"><span class="t">Guía</span><span class="ph-sub" style="font-weight:700">Mapa · Lista</span></div>
+          <div class="ph-body">
+            <div class="ph-search">Buscar comercio u oficio…</div>
+            <div class="ph-chips"><span class="ph-chip on">Abierto ahora</span><span class="ph-chip">Almacén</span><span class="ph-chip">Gasista</span><span class="ph-chip">Farmacia</span></div>
+            <div class="ph-map"><svg viewBox="0 0 240 200" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="240" height="200" fill="#E8EEE6"/>
+              <g fill="#DCE5D8">
+                <rect x="6" y="6" width="50" height="50" rx="3"/><rect x="64" y="6" width="50" height="50" rx="3"/><rect x="122" y="6" width="50" height="50" rx="3"/><rect x="180" y="6" width="54" height="50" rx="3"/>
+                <rect x="6" y="64" width="50" height="50" rx="3"/><rect x="180" y="64" width="54" height="50" rx="3"/>
+                <rect x="6" y="122" width="50" height="72" rx="3"/><rect x="64" y="122" width="50" height="72" rx="3"/><rect x="122" y="122" width="50" height="72" rx="3"/><rect x="180" y="122" width="54" height="72" rx="3"/>
+              </g>
+              <rect x="64" y="64" width="108" height="50" rx="3" fill="#B9DBB0"/>
+              <circle cx="118" cy="89" r="6" fill="#9CC991"/>
+              <text x="118" y="108" font-size="7" text-anchor="middle" fill="#3E6B35" font-family="Atkinson Hyperlegible, sans-serif">Plaza</text>
+              <g><path d="M90 40c-6 0-10 4.5-10 10 0 7.5 10 14 10 14s10-6.5 10-14c0-5.5-4-10-10-10z" fill="#0E6B5A"/><circle cx="90" cy="50" r="3.5" fill="#FFFFFF"/></g>
+              <g><path d="M150 100c-6 0-10 4.5-10 10 0 7.5 10 14 10 14s10-6.5 10-14c0-5.5-4-10-10-10z" fill="#B98200"/><circle cx="150" cy="110" r="3.5" fill="#FFFFFF"/></g>
+              <g><path d="M200 128c-6 0-10 4.5-10 10 0 7.5 10 14 10 14s10-6.5 10-14c0-5.5-4-10-10-10z" fill="#2D69C4"/><circle cx="200" cy="138" r="3.5" fill="#FFFFFF"/></g>
+              <g><path d="M36 130c-6 0-10 4.5-10 10 0 7.5 10 14 10 14s10-6.5 10-14c0-5.5-4-10-10-10z" fill="#D9692B"/><circle cx="36" cy="140" r="3.5" fill="#FFFFFF"/></g>
+              <circle cx="128" cy="160" r="6" fill="#2D69C4" stroke="#FFFFFF" stroke-width="2.5"/>
+            </svg></div>
+            <div class="ph-card"><div class="ph-row" style="justify-content:space-between"><span class="ph-h">Almacén Don Pedro</span><span class="ph-tag" style="background:var(--app-monte)">Abierto</span></div><span class="ph-stars">★★★★★ <span class="ph-sub">4,8 (52)</span></span><span class="ph-sub">Almacén · a 300 m · cierra 21 h</span></div>
+          </div>
+          <div class="ph-nav"><span><svg><use href="#i-home"/></svg>Inicio</span><span><svg><use href="#i-feed"/></svg>Muro</span><span class="on"><svg><use href="#i-pin"/></svg>Guía</span><span><svg><use href="#i-mega"/></svg>Reclamos</span><span><svg><use href="#i-more"/></svg>Más</span></div>
+        </div><span class="cap">Guía con mapa</span></div>
+
+        <div class="phone-wrap"><div class="phone" role="img" aria-label="Seguimiento de reclamo">
+          <div class="ph-status"><span>9:41</span><span>4G ▮▮▮</span></div>
+          <div class="ph-top"><span class="t">Mi reclamo</span><span class="mono" style="font-size:11px;color:var(--app-ink-2)">R-2026-0142</span></div>
+          <div class="ph-body">
+            <div class="ph-card"><span class="ph-tag" style="background:var(--app-girasol);color:#3A2A00;justify-self:start">En proceso</span><span class="ph-h">Luminaria apagada en la esquina</span><span class="ph-sub">Alumbrado · Belgrano y Mitre · 14/11/2026</span><div class="ph-img" style="height:70px;background:linear-gradient(160deg,#2B3A4A,#45576B 60%,#C9A44A 61%,#7D6A3A)"></div></div>
+            <span class="ph-h">Seguimiento</span>
+            <div class="ph-steps">
+              <div class="ph-step done"><i></i><span><b>Recibido</b><br><span class="ph-sub">14/11 · 19:02</span></span></div>
+              <div class="ph-step done"><i></i><span><b>En revisión</b><br><span class="ph-sub">15/11 · Asignado a Servicios Públicos</span></span></div>
+              <div class="ph-step now"><i></i><span><b>En proceso</b><br><span class="ph-sub">17/11 · “La cuadrilla pasa el jueves.”</span></span></div>
+              <div class="ph-step"><i></i><span><b>Resuelto</b></span></div>
+            </div>
+            <div class="ph-sub" style="font-size:10.5px">Solo vos y la municipalidad ven este reclamo.</div>
+          </div>
+          <div class="ph-nav"><span><svg><use href="#i-home"/></svg>Inicio</span><span><svg><use href="#i-feed"/></svg>Muro</span><span><svg><use href="#i-pin"/></svg>Guía</span><span class="on"><svg><use href="#i-mega"/></svg>Reclamos</span><span><svg><use href="#i-more"/></svg>Más</span></div>
+        </div><span class="cap">Seguimiento de reclamo</span></div>
+
+        <div class="phone-wrap"><div class="phone" role="img" aria-label="Idea vecinal con grupo de WhatsApp">
+          <div class="ph-status"><span>9:41</span><span>4G ▮▮▮</span></div>
+          <div class="ph-top"><span class="t">Idea vecinal</span><span class="ph-tag" style="background:var(--app-cielo)">En marcha</span></div>
+          <div class="ph-body">
+            <div class="ph-img" style="height:96px;background:linear-gradient(180deg,#9CC991 0%,#7FB069 55%,#6B4F2E 56%,#5A4226 100%)"></div>
+            <span class="ph-h" style="font-size:16px">Huerta comunitaria en el predio del ferrocarril</span>
+            <span class="ph-sub">Propuesta por Marta G. · Barrio Estación</span>
+            <span class="ph-sub" style="color:var(--app-ink)">Armemos una huerta para que cada familia tenga su cantero. Los chicos de la escuela pueden aprender a sembrar.</span>
+            <div class="ph-row" style="justify-content:space-between"><b>47 vecinos se sumaron</b><span class="ph-sub">meta 60</span></div>
+            <div class="ph-bar"><b style="width:78%"></b></div>
+            <div class="ph-btn wa">Unirme al grupo de WhatsApp</div>
+            <div class="ph-btn" style="background:var(--app-surface);color:var(--app-ink);border:1.5px solid var(--app-line)">Comentar (18)</div>
+          </div>
+          <div class="ph-nav"><span><svg><use href="#i-home"/></svg>Inicio</span><span><svg><use href="#i-feed"/></svg>Muro</span><span><svg><use href="#i-pin"/></svg>Guía</span><span><svg><use href="#i-mega"/></svg>Reclamos</span><span class="on"><svg><use href="#i-more"/></svg>Más</span></div>
+        </div><span class="cap">Idea con grupo</span></div>
+
+      </div>
+    </section>
+
+    <div class="part">Parte IV · Plan</div>
+
+    <section id="roadmap">
+      <div class="sec-head"><span class="eyebrow">18 · Hoja de ruta</span><h2>En qué orden se construye</h2></div>
+      <div class="roadmap">
+        <div class="box"><h4>Fase 1 · MVP <span class="phase f1">6 a 8 semanas</span></h4><ul class="clean">
+          <li>Cuentas y roles.</li><li>Muro con fotos, comentarios y denuncias.</li><li>Reclamos con seguimiento y bandeja municipal.</li><li>Guía de comercios con mapa y oficios, con calificaciones.</li><li>Ideas con enlace a grupo.</li><li>Teléfonos útiles y farmacia de turno.</li></ul></div>
+        <div class="box"><h4>Fase 2 · Lanzamiento <span class="phase f2">4 semanas</span></h4><ul class="clean">
+          <li>Migración a PostgreSQL y Supabase, dominio propio.</li><li>Notificaciones push y avisos oficiales.</li><li>Agenda con recordatorios.</li><li>Fichas verificadas y respuestas a reseñas.</li><li>Estadísticas del panel y auditoría.</li><li>Prueba piloto con 50 vecinos y la municipalidad.</li></ul></div>
+        <div class="box"><h4>Fase 3 · Crecimiento <span class="phase f3">continuo</span></h4><ul class="clean">
+          <li>Red solidaria, mascotas perdidas y bolsa de trabajo.</li><li>Encuestas vecinales.</li><li>Cronograma de recolección por barrio.</li><li>Evaluar app en tiendas si la PWA queda corta.</li></ul></div>
+      </div>
+      <div class="note"><b>Antes de lanzar:</b> conviene acordar con la municipalidad quién responde los reclamos y en qué plazo, y quiénes van a moderar. La tecnología funciona solo si del otro lado hay alguien atendiendo.</div>
+    </section>
+  </main>
+</div>
+<footer><div class="wrap">Sampacho Conecta · Documento de diseño v1.0 · noviembre de 2026 · Pensado por y para la comunidad.</div></footer>

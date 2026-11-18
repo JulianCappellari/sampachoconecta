@@ -1,0 +1,236 @@
+@import "tailwindcss";
+
+/* Sampacho Conecta — tokens de diseño (ver docs/diseno-sistema.html) */
+:root {
+  --bg: #f4f7f5;
+  --surface: #ffffff;
+  --surface-2: #e9f0ec;
+  --ink: #13221e;
+  --ink-2: #4a5d56;
+  --line: #d5e0da;
+  --monte: #0e6b5a;
+  --monte-soft: #d7ece5;
+  --on-monte: #ffffff;
+  --girasol: #f2b02a;
+  --girasol-soft: #fcefcf;
+  --on-girasol: #3a2a00;
+  --cielo: #2d69c4;
+  --cielo-soft: #dce7f8;
+  --ok: #1e8a4c;
+  --warn: #a86a00;
+  --err: #c2362c;
+  --err-soft: #fbe3e0;
+  --wa: #1f8f4e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1513;
+    --surface: #14201d;
+    --surface-2: #1a2925;
+    --ink: #e5eeea;
+    --ink-2: #a2b5ae;
+    --line: #293b36;
+    --monte: #45c2a2;
+    --monte-soft: #163a32;
+    --on-monte: #06201a;
+    --girasol: #f5c452;
+    --girasol-soft: #3a2f14;
+    --on-girasol: #2a1e00;
+    --cielo: #7aa7f0;
+    --cielo-soft: #1a2b45;
+    --ok: #4cc27f;
+    --warn: #e5a93a;
+    --err: #f07468;
+    --err-soft: #3a1a17;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-line: var(--line);
+  --color-monte: var(--monte);
+  --color-monte-soft: var(--monte-soft);
+  --color-on-monte: var(--on-monte);
+  --color-girasol: var(--girasol);
+  --color-girasol-soft: var(--girasol-soft);
+  --color-on-girasol: var(--on-girasol);
+  --color-cielo: var(--cielo);
+  --color-cielo-soft: var(--cielo-soft);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-err: var(--err);
+  --color-err-soft: var(--err-soft);
+  --color-wa: var(--wa);
+  --font-sans: var(--font-body), "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-display), "Segoe UI", system-ui, sans-serif;
+  --radius-card: 1rem;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body), "Segoe UI", system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  min-height: 100svh;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display), "Segoe UI", system-ui, sans-serif;
+  text-wrap: balance;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+/* Evita que un hijo de grid ensanche la pantalla en móvil (min-width:auto por defecto). */
+:where(.grid) > * {
+  min-width: 0;
+}
+:where(.grid:not([class*="grid-cols"])) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+:focus-visible {
+  outline: 3px solid var(--cielo);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: var(--girasol);
+  color: var(--on-girasol);
+}
+
+/* Acceso de emergencia: por encima de la barra móvil y de las áreas seguras. */
+@media (max-width: 639px) {
+  .site-brand > span { max-width: 100%; gap: 0.5rem; }
+  .site-brand > span > span { min-width: 0; font-size: 1.125rem; }
+  .site-brand svg { flex-shrink: 0; }
+}
+.emergency-access {
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: calc(5rem + env(safe-area-inset-bottom));
+}
+.emergency-panel {
+  max-height: calc(100dvh - 11rem - env(safe-area-inset-bottom));
+  overscroll-behavior: contain;
+}
+@media (min-width: 1024px) {
+  .emergency-access { bottom: max(1.5rem, env(safe-area-inset-bottom)); }
+  .emergency-panel { max-height: calc(100dvh - 8rem); }
+}
+
+/* Leaflet: adaptar controles al tema */
+.leaflet-container {
+  font-family: inherit;
+  background: var(--surface-2);
+  z-index: 0;
+}
+.sc-pin {
+  background: none;
+  border: 0;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 14px;
+}
+.leaflet-popup-content a {
+  color: #0e6b5a;
+  font-weight: 700;
+}
+
+/* Hero: estado inicial oculto solo si hay movimiento. Si el script no llega, a los 2,5 s se muestra igual. */
+@keyframes h-failsafe {
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .h-line > span {
+    display: inline-block;
+    transform: translateY(112%);
+    animation: h-failsafe 0s 2.5s forwards;
+  }
+  .h-fade {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: h-failsafe 0s 2.5s forwards;
+  }
+}
+
+/* Aurora (fondo del hero) */
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  animation: aurora-drift 30s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift {
+  to {
+    transform: translate3d(8%, 10%, 0) scale(1.15);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob {
+    animation: none;
+  }
+}
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* Marquee */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 38s linear infinite;
+  width: max-content;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.pop {
+  animation: pop 0.35s ease-out;
+}

@@ -1,0 +1,23 @@
+# Dependencias y compilaciones
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Datos locales del prototipo (base SQLite y fotos subidas) y claves
+web/data/
+.env
+.env.*
+!.env.example
+*.pem
+
+# Sistema y herramientas
+.DS_Store
+Thumbs.db
+npm-debug.log*
+.vercel/
+
+# Copia exportada del documento de diseño (la fuente está en docs/)
+Sampacho Conecta.html
