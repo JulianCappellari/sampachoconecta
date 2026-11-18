@@ -28,21 +28,22 @@ npm install
 npm run dev      # http://localhost:3000
 ```
 
-Al primer arranque se crea `data/sampacho.db` (SQLite) con datos de ejemplo inventados y la carpeta `data/uploads` para las fotos. Para empezar de cero, borrá la carpeta `data`.
+Al primer arranque **en desarrollo** se crea `data/sampacho.db` (SQLite) con los datos de prueba y la carpeta `data/uploads` para las fotos. En producción una base vacía queda vacía: los datos de prueba se cargan solo a propósito.
 
 Otros comandos: `npm run build`, `npm run start`, `npm run lint`, `node scripts/make-icons.mjs` (regenera los íconos de la PWA).
 
-## Cuentas de ejemplo
+## Datos de prueba y producción
 
-Todas usan la contraseña definida en la variable `SEED_PASSWORD` o, si no existe, la de [`src/lib/seed.ts`](src/lib/seed.ts).
+```bash
+SEED_PASSWORD='una-contraseña-larga' npm run seed                  # carga todo, con fotos de ejemplo
+SEED_PASSWORD='…' npm run seed -- --reset --yes                    # borra y vuelve a cargar
+npm run seed -- --reset --yes --no-seed --allow-production         # solo vacía (para el sitio real)
+ADMIN_PASSWORD='…' npm run create-admin -- --email=… --name="…"    # primera cuenta real de la municipalidad
+```
 
-| Rol | Email |
-|---|---|
-| Municipalidad | municipio@sampacho.test |
-| Moderación | moderacion@sampacho.test |
-| Vecinos | marta@, luis@, carla@, pedro@ `sampacho.test` |
+El seed cubre todos los módulos en todos sus estados, con 19 cuentas de prueba (municipio, moderación, vecinos, una suspendida). No corre en producción sin `--allow-production`, exige contraseña propia y no pisa datos existentes. En producción la carpeta de datos se define con `SAMPACHO_DATA_DIR` y debe ser un disco persistente.
 
-Cambiá o eliminá estas cuentas antes de publicar el sitio.
+Cuentas, qué hay cargado y una guía de pruebas por rol: [`../docs/SEED_Y_PRODUCCION.md`](../docs/SEED_Y_PRODUCCION.md).
 
 ## Stack
 

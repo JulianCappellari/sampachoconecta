@@ -4,7 +4,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { seed } from "./seed";
 
-const DATA_DIR = path.join(/* turbopackIgnore: true */ process.cwd(), "data");
+// En producción conviene apuntar SAMPACHO_DATA_DIR a un disco persistente (la base y las fotos viven ahí).
+const DATA_DIR = process.env.SAMPACHO_DATA_DIR ?? path.join(/* turbopackIgnore: true */ process.cwd(), "data");
 export const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
 
 const SCHEMA = `
@@ -496,7 +497,9 @@ function open(): DatabaseSync {
   db.exec("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;");
   migrate(db);
   const { n } = db.prepare("SELECT COUNT(*) AS n FROM users").get() as { n: number };
-  if (n === 0) seed(db);
+  // Datos de ejemplo automáticos SOLO en desarrollo. En producción la base vacía queda vacía: los datos de
+  // prueba se cargan a propósito con `npm run seed`, nunca solos (llevarían cuentas con contraseña conocida).
+  if (n === 0 && process.env.SEED_DISABLE_AUTO !== "1" && (process.env.NODE_ENV !== "production" || process.env.SEED_ON_EMPTY === "1")) seed(db);
   return db;
 }
 

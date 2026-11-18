@@ -28,3 +28,7 @@ NO probado: bulk "resolver vinculados", desvincular, permisos municipio, cancela
 Implementado y probado en navegador: encuestas (voto único, envíos simultáneos, cierre), alertas (urgentes inmediatas a todos o a una zona, banner en Hoy, push diferido en horario de descanso, un fallo de envío no rompe nada), residuos (cronograma, bloque en Hoy, recordatorio solo a quien sigue), empleo, turismo, destacado (postulación, regla de 4 semanas, elección automática), transparencia (sin datos personales). 15 pantallas nuevas sin desborde a 375 px.
 NO verificado: entrega real de push a un teléfono; service worker y modo sin conexión (solo se registra en producción; sw.js solo con node --check); build de producción (un dev server ajeno usa web/.next); iPhone.
 Pendiente: pruebas automáticas, límites de uso en encuestas y empleo, editar avisos de empleo.
+
+## Seed y producción (2026-11-18)
+Seed completo verificado en una base aparte: 108 páginas sin error como municipio; estados y permisos por rol confirmados (suspendida no entra; moderador sin acceso a reclamos; fotos de reclamos 200 autora/municipio, 403 otros, 401 visitante). Guía: docs/SEED_Y_PRODUCCION.md.
+Requisito de hosting: SQLite + fotos en disco necesitan disco PERSISTENTE (no serverless). Sin commit ni push de estos cambios todavía.
