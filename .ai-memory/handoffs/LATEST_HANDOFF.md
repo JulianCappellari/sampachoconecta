@@ -1,38 +1,36 @@
-# Latest handoff
+# Latest handoff — Vercel / Neon
 
-## Corrección desktop — Codex T-20261118-006 / P-20261118-007
-- 2026-11-18, America/Buenos_Aires. DONE.
-- El usuario mostró captura de la cabecera estirada por el pronóstico abierto. Móvil estaba bien y se preservó.
-- WeatherWidget: detalle absoluto desde 1024 px, 416 px de ancho y hasta 50dvh de alto, scroll interno, Escape y salida de foco para cerrar. HoySection: stacking de cabecera solo desktop.
-- QA PASS: desktop 1280/1440 mantiene alturas de tarjeta/cabecera al abrir; móvil 390 usa flujo normal sin overflow. Build/tipos/lint PASS; servicio y datos intactos.
-- [Sesión](../sessions/2026-11/20261118-T-20261118-006-codex.md). Siguiente acción: revisión del usuario.
+- Codex → Claude / siguiente agente. Updated: 2026-11-18, America/Buenos_Aires.
+- Task T-20261118-013; prompts P-20261118-013/014. Estado: implementación y QA local terminadas; validación global PARTIAL (ver NOT_RUN). No prometer producción certificada.
+- Git está en la RAÍZ, rama main. Commits de trabajo: a8728da (implementación/tests), 21ff8f1 (guía/QA/Oracle). Este handoff se guarda en un tercer commit de memoria. Verificar git status/log al retomar.
 
-## Último ajuste — Codex T-20261118-005 / P-20261118-006
-- 2026-11-18, America/Buenos_Aires. DONE.
-- Preferencia explícita: emergencias solo icono, clima minimalista/pequeño/secundario.
-- Cambios en EmergencyButton (círculo 48 px y aria-label), WeatherWidget (resumen compacto y detalle), HoySection (clima en cabecera secundaria).
-- Estado cerrado medido: 288×149 px desktop; 343×149 px móvil 390 px. Fuentes, servicio meteorológico y contactos intactos.
-- PASS build/tsc/lint; QA desktop/móvil, detalle, panel/Escape y sin overflow. Sin nuevas pruebas para presentación ni repetición de lógica sin cambios.
-- [Sesión](../sessions/2026-11/20261118-T-20261118-005-codex.md). Siguiente acción: revisión del usuario; preservar este menor protagonismo del clima.
+## Leer primero
 
-## Codex → Claude / siguiente agente — 18/11/2026
-- Task: T-20261118-004 / Prompt: P-20261118-005. Status: DONE.
-- Implementado acceso global de emergencias y clima multimodelo manteniendo la línea visual y arquitectura existentes.
-- Leer [EMERGENCIAS_Y_CLIMA.md](../../docs/EMERGENCIAS_Y_CLIMA.md), [sesión](../sessions/2026-11/20261118-T-20261118-004-codex.md).
-- Nuevos: `web/src/lib/emergency.ts`, `weather-core.ts`, `weather.ts`; `web/src/components/site/EmergencyButton.tsx`, `web/src/components/weather/WeatherWidget.tsx`; `web/src/app/api/clima/route.ts`; `web/scripts/weather.test.mjs`.
-- Integraciones mínimas en layout, HoySection, globals.css y Header; README enlaza operación. Preservar el trabajo previo de Claude en todos esos archivos.
-- Modelos ECMWF/NOAA/DWD distribuidos por Open-Meteo; consulta/caché 10 min, timeout 7 s, fallback hasta 2 h marcado anterior, sin simular datos ni pedir GPS. Una fuente sola se identifica; coincidencia no es probabilidad.
-- Emergencias 107/100/101 verificadas en fuente municipal citada en documento; destinos tel, no llamadas automáticas.
-- Verificación PASS: 12 tests Node, tsc, eslint, build, HTTP 200 de /api/clima con 3 modelos, desktop y móvil 390/360 px, Escape/Tab/foco. Último chequeo opcional de clic fuera bloqueado por política del navegador; no contarlo como PASS. Viewport restaurado.
-- Build inicialmente falló en worker CSS de Turbopack; se movieron únicamente caches generadas a `.next/cache/turbopack-before-codex-T004` y `.next/build-before-codex-T004`; recompilación limpia PASS. No se cambió configuración ni se borraron datos.
-- Branch/HEAD: web/master, `80453f6`, cambios previos y propios sin commit. No hubo deploy ni push.
-- Siguiente acción: revisión del usuario; para producción revisar términos no comerciales y caché compartida si hay múltiples instancias. No hay migraciones requeridas.
+- [Contexto actual](../PROJECT_CONTEXT.md), [tarea](../ACTIVE_TASK.md), [sesión](../sessions/2026-11/20261118-T-20261118-013-codex.md).
+- [Despliegue desde cero](../../docs/DESPLIEGUE_VERCEL.md), [QA y límites](../../docs/QA_VERCEL_NEON.md).
+- [Datos](../architecture/DATABASE.md), [arquitectura](../architecture/SYSTEM.md), [permisos](../business/PERMISSIONS.md).
 
-## Handoff histórico previo de Claude
-- From agent: Claude Code (claude-sonnet-5-5)  | Timestamp: 2026-11-18
-- Branch/HEAD: root not git; web/ own repo, uncommitted
-- Active task: T-20261118-002 (DONE, Fase 1)
-- Verified: `cd web && npm run build` OK; app runs at :3000 via `.claude/launch.json` preview; data/ was deleted so next start reseeds demo data.
-- Unfinished/unverified: see PROJECT_STATE.md "NOT tested"; no automated tests (Vitest/Playwright planned).
-- Gotchas: global CSS edits sometimes need dev server restart (Turbopack+Tailwind loader cache); httpOnly cookie cannot be overwritten from JS in QA; qa session rows were created in the deleted DB only.
-- Next: see ACTIVE_TASK.md. Required docs: ../PROJECT_CONTEXT.md, ../PROJECT_STATE.md, web/README.md
+## Resultado técnico
+
+- Postgres 18 por pg/DATABASE_URL, API all/one/run/tx async y toda la cadena convertida. Migraciones 1–4 conservadas en schema.ts; compatibilidad SQL UTC en sql.ts. Pool 5, advisory de migración, ALS/savepoints, serializable/reintentos. DELETE/TRUNCATE de reclamos e historial bloqueados; reset administrativo solo con permiso SET LOCAL transaccional.
+- Seed completo, scripts env/migrate/create-admin/seed e importador SQLite de transición. No se importó ni borró el SQLite original. No hay SQLite en runtime.
+- Store Blob PRIVADO para TODAS las fotos: el access:public del prompt no preservaría privacidad real. Proxy público con caché para fotos p/l/i; c solo autor/municipio, no-store también en errores. Sin token en Vercel falla cerrado, nunca escribe en disco.
+- Cliente comprime antes de enviar; presupuesto 3,8 MB, hasta 750 KB/foto; Next 4 MB; servidor vuelve a validar y convierte a WebP sin EXIF.
+- Ajustes verificados por concurrencia: cupos, ediciones, respuestas y notificaciones; login compartido; after fuera del cliente de tx liberado. SW cachea solo páginas anónimas autorizadas por proxy. Campos con etiquetas implícitas evitan colisiones de id sin añadir JS ni cambiar la estética.
+- Región preparada gru1; cambiar a iad1 si Neon São Paulo no está disponible al crear cuenta. Revisar términos no comerciales de Hobby; decisión del responsable. Oracle/Docker productivo retirado; compose solo para desarrollo.
+
+## Validación real
+
+- PASS: tsc, ESLint tipado sin warnings nuevos, next build + next start con Postgres local.
+- PASS: 25 casos lógicos (10 DB, 3 archivos, 12 clima); Node cuenta además dos suites padre. CLI en base aparte: seed/reset/admin/importación/secuencias/origen intacto.
+- PASS último build: 492 GET por cinco roles y autor de foto, 200 llamadas de acciones; 79 exportaciones sin sesión, 78 circuitos válidos. savePush real excluido.
+- PASS: conflictos simultáneos de avisos/reclamos y cupos, privacidad de notas/fotos, idempotencia, autoseed dev 19/prod 0, salud 200 y 503 no-store. npm audit cero tras override compatible Zod transitivo.
+- Manual amplia, NO exhaustiva de todas las variantes; tabla exacta y capturas en QA. IAB se trabó transitoriamente en confirmación, luego se recuperó. La corrección de Farmacia se volvió a probar por etiqueta y DB. Sin errores de consola en la última captura.
+- NOT_RUN: Vercel/Neon/Blob reales, entrega push/PWA física/iOS/offline real, backup/restauración externa, lectores de pantalla y todas las variantes manuales. Correo/verificación de identidad siguen pendientes, sin cola durable/cron.
+
+## Estado del entorno y próximo paso
+
+- Sin push, deploy ni cuentas externas. No se usaron recursos reales de Neon/Blob ni dispositivos push; push_subscriptions tenía cero filas.
+- Servidores QA propios detenidos (3138/3140 libres); contenedor sampacho-codex-pg detenido con datos sintéticos conservados. No tocar contenedores ni servidor de otros proyectos. No se editó .env.local existente.
+- Para repetir: configurar Postgres local y variables privadas propias siguiendo la guía. Tests DB/rutas/acciones exigen host local y nombre terminado _test; CLI otra base vacía _cli_test y hace resets. El servidor y manifiesto de test:actions deben ser del mismo build.
+- Siguiente acción segura: revisión humana del diff/guía y completar los NOT_RUN en un entorno de prueba autorizado. No publicar ni resetear producción por inferencia.

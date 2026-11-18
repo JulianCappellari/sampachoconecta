@@ -1,5 +1,7 @@
 # Prompt Log
 
+P-20261118-013 | 2026-11-18 America/Buenos_Aires | Codex | T-20261118-013 | Ejecutar el prompt del repositorio para migrar a Vercel + Neon, con pruebas locales, guía para principiantes y commits sin push/deploy | IN_PROGRESS | [sesión](../sessions/2026-11/20261118-T-20261118-013-codex.md).
+
 
 | Prompt ID | Date/time | Agent | Task ID | Safe request | Acceptance criteria | Outcome | Session |
 |---|---|---|---|---|---|---|---|
@@ -17,3 +19,12 @@
 | P-20261118-010 | 2026-11-18 | Claude Code | T-20261118-010 | Aplicar ideas 2 (encuestas), 4 (alertas clima), 5 (residuos), 6 (empleo), 8 (turismo), 9 (PWA offline + push), 10 (transparencia), 11 (destacado). Nota: los IDs P/T-20261118-005..007 se usaron en paralelo por Claude (moderación) y Codex (clima); desde acá se usan IDs 010+ | Implementadas y probadas en navegador | DONE (push real sin verificar) | — |
 | P-20261118-011 | 2026-11-18 | Claude Code | T-20261118-011 | Generar un seed completo y detallado para probar todo en producción | Seed, comandos seguros, guía por rol; verificado en una base aparte | DONE (sin commit) | — |
 - P-20261118-012: el usuario nunca desplegó en Oracle; pide guía desde cero. Se preparó Dockerfile/compose/Caddy/backups y docs/DESPLIEGUE_ORACLE.md.
+
+
+## Continuación Codex de la migración
+
+| Prompt ID | Date/time | Agent | Task ID | Safe request | Acceptance criteria | Outcome | Session |
+|---|---|---|---|---|---|---|---|
+| P-20261118-014 | 2026-11-18 America/Buenos_Aires | Codex | T-20261118-013 | Continuar el trabajo de migración después de la interrupción | Conservar alcance: verificaciones, guía, memoria y commits locales; sin push/deploy | Continuación ejecutada; instalación previamente detenida por revisión automática por límite de uso luego completada | [sesión](../sessions/2026-11/20261118-T-20261118-013-codex.md) |
+
+Resultado final P-20261118-013/014: implementación/guía/checks locales completados en a8728da y 21ff8f1; validación global PARTIAL por variantes manuales y servicios/dispositivos reales no comprobados. Sin push/deploy; detalle en sesión y QA.

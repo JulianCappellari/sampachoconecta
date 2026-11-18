@@ -1,3 +1,12 @@
+# Estado actual — T-20261118-013 (2026-11-18)
+
+- IMPLEMENTADO: pg/Postgres async, migraciones/seed/scripts/importación, Blob privado, compresión, lint tipado, preparación y guía Vercel/Neon; Oracle retirado. Commit de código a8728da.
+- PASS local: tsc/lint/build/start, 25 casos lógicos, CLI, 492 lecturas y 200 acciones por HTTP, npm audit cero. QA manual de todos los módulos principales; algunos caminos/variantes solo por HTTP.
+- NOT_RUN: recursos Vercel/Neon/Blob reales, entrega push, PWA física y recuperación externa. No se hizo push/deploy. No certificar producción hasta completarlo.
+- [QA y límites](../docs/QA_VERCEL_NEON.md). [Guía](../docs/DESPLIEGUE_VERCEL.md).
+
+## Historial anterior (las menciones a SQLite activo y pruebas faltantes deben contrastarse con el estado de arriba)
+
 # Project state (VERIFIED 2026-11-18)
 
 T-20261118-006: corregida expansión del clima en escritorio con detalle flotante desde 1024 px y scroll interno; cabecera no crece. Móvil preservado. QA/build/tipos/lint PASS. [Sesión](sessions/2026-11/20261118-T-20261118-006-codex.md).
